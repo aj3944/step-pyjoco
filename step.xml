@@ -47,18 +47,19 @@
     <body name="pelvis" pos="0 0 0.66" childclass="step6">
     <!-- <inertial pos="-0.0002 4e-05 -0.04522" quat="0.498303 0.499454 -0.500496 0.501741" mass="5.39" diaginertia="0.0490211 0.0445821 0.00824619"/> -->
       <freejoint/>
-      <site name="imu" size="0.01" pos="0.03155 0 -0.07996"/>
+       <site name="imu" size="0.01" pos="0.03155 0 -0.07996"/>
+
       <geom type="mesh"  mesh="pelvis" class="collision"/>
       <geom class="visual" mesh="pelvis"/>
       <body name="step_bot_left_hip_yaw_link" pos="0 0.0 -0.0">
         <!-- <inertial pos="-0.04923 0.0001 0.0072" quat="0.69699 0.219193 0.233287 0.641667" mass="2.244" diaginertia="0.00304494 0.00296885 0.00189201"/> -->
-        <joint name="left_hip_yaw" pos="0 .1 0 " axis="0 0 1" range="-0.43 0.43"/>
+        <joint name="left_hip_yaw" pos="0 .1 0 " axis="1 0 1" range="-0.43 0.43"/>
         <geom class="collision" mesh="step_bot_left_hip_yaw_link"/>
         <geom class="visual" mesh="step_bot_left_hip_yaw_link"/>
         <!-- <geom size="0.06 0.035" pos="-0.0 0 0" quat="0.707123 0 0.70709 0" type="cylinder" class="collision"/> -->
         <body name="step_bot_left_hip_pitch_link" pos="0 0.0 -0.0">
           <!-- <inertial pos="-0.04923 0.0001 0.0072" quat="0.69699 0.219193 0.233287 0.641667" mass="2.244" diaginertia="0.00304494 0.00296885 0.00189201"/> -->
-          <joint name="left_hip_pitch" pos="0 .1 -.09 " axis="0 1 0" range="-1.43 1.43"/>
+          <joint name="left_hip_pitch" pos="0 .1 -.12 " axis="0 1 0" range="-1.43 1.43"/>
           <!-- <geom type="mesh"  mesh="step_bot_left_hip_yaw_link" /> -->
           <geom class="collision" mesh="step_bot_left_hip_pitch_link"/>
           <geom class="visual" mesh="step_bot_left_hip_pitch_link"/>
@@ -87,13 +88,13 @@
       </body>
       <body name="step_bot_right_hip_yaw_link" pos="0 0.0 -0.0">
         <!-- <inertial pos="-0.04923 0.0001 0.0072" quat="0.69699 0.219193 0.233287 0.641667" mass="2.244" diaginertia="0.00304494 0.00296885 0.00189201"/> -->
-        <joint name="right_hip_yaw" pos="0 -.1 0 " axis="0 0 1" range="-0.43 0.43"/>
+        <joint name="right_hip_yaw" pos="0 -.1 0 " axis="1 0 1" range="-0.43 0.43"/>
         <geom class="collision" mesh="step_bot_right_hip_yaw_link"/>
         <geom class="visual" mesh="step_bot_right_hip_yaw_link"/>
         <!-- <geom size="0.06 0.035" pos="-0.0 0 0" quat="0.707123 0 0.70709 0" type="cylinder" class="collision"/> -->
          <body name="step_bot_right_hip_pitch_link" pos="0 0.0 -0.0">
             <!-- <inertial pos="-0.04923 0.0001 0.0072" quat="0.69699 0.219193 0.233287 0.641667" mass="2.244"     diaginertia="0.00304494 0.00296885 0.00189201"/> -->
-            <joint name="right_hip_pitch" pos="0 -.1 -0.09 " axis="0 1 0" range="-1.43 1.43"/>
+            <joint name="right_hip_pitch" pos="0 -.1 -0.12 " axis="0 1 0" range="-1.43 1.43"/>
             <geom class="collision" mesh="step_bot_right_hip_pitch_link"/>
             <geom class="visual" mesh="step_bot_right_hip_pitch_link"/>
             <!-- <geom size="0.06 0.035" pos="-0.0 0 0" quat="0.707123 0 0.70709 0" type="cylinder" class="collision"/> -->
@@ -105,7 +106,7 @@
               <!-- <geom size="0.06 0.035" pos="-0.0 0 0" quat="0.707123 0 0.70709 0" type="cylinder" class="collision"/> -->
               <body name="step_bot_right_ankle_link" pos="0 0.0 -0.0">
                   <!-- <inertial pos="-0.04923 0.0001 0.0072" quat="0.69699 0.219193 0.233287 0.641667" mass="2.244"     diaginertia="0.00304494 0.00296885 0.00189201"/> -->
-                  <joint name="right_ankle_roll" pos="0 -.12 -.475 " axis="-1 0 0" range="-1.43 1.43"/>
+                  <joint name="right_ankle_roll" pos="0 -.12 -.475 " axis="1 0 0" range="-1.43 1.43"/>
                   <geom class="collision" type="mesh" mesh="step_bot_right_ankle_link"/>
                   <geom class="visual" mesh="step_bot_right_ankle_link"/>
                   <!-- <geom size="0.06 0.035" pos="-0.0 0 0" quat="0.707123 0 0.70709 0" type="cylinder" class="collision"/> -->
@@ -119,16 +120,20 @@
   </worldbody>
 
   <contact>
+
   </contact>
   <actuator>
-    <motor class="step6" name="left_hip_yaw" joint="left_hip_yaw" ctrlrange="-10 10"/>
-    <motor class="step6" name="left_hip_pitch" joint="left_hip_pitch" ctrlrange="-10 10"/>
-    <motor class="step6" name="left_knee_pitch" joint="left_knee_pitch" ctrlrange="-10 10"/>
-    <motor class="step6" name="left_ankle_roll" joint="left_ankle_roll" ctrlrange="-10 10"/>
-    <motor class="step6" name="right_hip_yaw" joint="right_hip_yaw" ctrlrange="-10 10"/>
-    <motor class="step6" name="right_hip_pitch" joint="right_hip_pitch" ctrlrange="-10 10"/>
-    <motor class="step6" name="right_knee_pitch" joint="right_knee_pitch" ctrlrange="-10 10"/>
-    <motor class="step6" name="right_ankle_roll" joint="right_ankle_roll" ctrlrange="-10 10"/>
+    <position class="step6" name="left_hip_yaw" joint="left_hip_yaw" ctrlrange="-10 10"  kp="20"/>
+    <!-- <motor class="step6" name="left_hip_pitch" joint="left_hip_pitch" ctrlrange="-10 10"/> -->
+    <position class="step6" name="left_hip_pitch" joint="left_hip_pitch" ctrlrange="-10 10"  kp="15"/>
+    <position class="step6" name="left_knee_pitch" joint="left_knee_pitch" ctrlrange="-10 10"  kp="15"/>
+    <position class="step6" name="left_ankle_roll" joint="left_ankle_roll" ctrlrange="-10 10"  kp="15"/>
+    <position class="step6" name="right_hip_yaw" joint="right_hip_yaw" ctrlrange="-10 10"  kp="20"/>
+    <position class="step6" name="right_hip_pitch" joint="right_hip_pitch" ctrlrange="-10 10"  kp="15"/>
+    <position class="step6" name="right_knee_pitch" joint="right_knee_pitch" ctrlrange="-10 10"  kp="15"/>
+    <position class="step6" name="right_ankle_roll" joint="right_ankle_roll" ctrlrange="-10 10"  kp="15"/>
+    <!-- <position class="step6" name="right_ankle_roll" joint="right_ankle_roll" ctrlrange="-10 10"  kp="5"/> -->
+    <!-- <plugin class="step6" name="plug1" /> -->
   </actuator>
   <sensor>
     <!-- <framequat name="pelvis-orientation" objtype="site" objname="imu"/> -->

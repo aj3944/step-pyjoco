@@ -3,7 +3,8 @@ module hip_bracket(){
 	difference(){
 
 		hull(){
-			translate([0,-LINK_OFFSET_1,-43])
+			translate([-30,-LINK_OFFSET_1,-30])
+			rotate([45,0,90])
 			cylinder(h=10, r=26, center=false, $fn=50);	
 
 
@@ -21,14 +22,17 @@ module hip_bracket(){
 		rotate([0,90,-90])
 		cylinder(r=42,h=50);
 
-		translate([0,-LINK_OFFSET_1,-LINK_LENGTH_2 + 17])
-		cylinder(h=32, r=20, center=false, $fn=50);
+		// translate([0,-LINK_OFFSET_1,-LINK_LENGTH_2 + 17])
+		// cylinder(h=32, r=20, center=false, $fn=50);
 
 		translate([0,-LINK_OFFSET_1,0])
-		rotate([0,0,180])
+		rotate([45,0,90])
 		{
-			mg6012_mounting_holes(40);
+			mg6012_mounting_holes(120);
 			mg6012_mounting_bumps();
+			translate([0,0,-30])
+			mg6012_mounting_holes(40,1);
+
 		}
 
 		translate([0,-LINK_OFFSET_1 - 10,-LINK_LENGTH_2])
@@ -43,6 +47,12 @@ module hip_bracket(){
 
 }
 
+		// translate([0,-LINK_OFFSET_1,0])
+		// rotate([45,0,90])
+		// translate([0,0,-30])
+		// {
+		// 	mg6012_mounting_holes(40,1);
+		// }
 
 
 module thigh_bracket()
@@ -196,7 +206,7 @@ rotate([-90,0,90])
 module hip_motor(){
 
 translate([0,-LINK_OFFSET_1,0])
-rotate([0,0,180])
+rotate([45,0,90])
 mg6012();	
 }
 
@@ -226,48 +236,55 @@ module right_actuators(){
 
 
 module hip_plate(){
-	translate([0,-LINK_OFFSET_1,0])
-	rotate([0,0,180])
+	translate([-0,-LINK_OFFSET_1,0])
+	rotate([45,0,90])
 	mg6012_back_grip();
-	translate([0,LINK_OFFSET_1,0])
-	rotate([0,0,180])
+	translate([-0,LINK_OFFSET_1,0])
+	mirror([0,1,0])
+	rotate([45,0,90])
 	mg6012_back_grip();
 
 
 	sequentialHull()
 	{
-	translate([0,LINK_OFFSET_1,14])
+	translate([10,LINK_OFFSET_1,14])
+	rotate([45,0,90])
 	cylinder(r=32,h=5);		
-	translate([0,LINK_OFFSET_1,30])
+	translate([30,LINK_OFFSET_1,50])
+	rotate([15,0,90])
 	cylinder(r=40,h=20);		
-	translate([0,0,30])
-	cylinder(r=90,h=20);		
-	translate([0,-LINK_OFFSET_1,30])
+	translate([0,80,55])
+	cylinder(r=45,h=25);		
+	translate([0,-80,55])
+	cylinder(r=45,h=25);		
+	translate([30,-LINK_OFFSET_1,50])
+	rotate([15,0,90])
 	cylinder(r=40,h=20);	
-	translate([0,-LINK_OFFSET_1,14])
+	translate([10,-LINK_OFFSET_1,14])
+	rotate([45,0,90])
 	cylinder(r=32,h=5);	
 	}
 
 }
-// mirror([0,1,0])
-hip_plate ();
-{
-	hip_bracket();
-	hip_motor();
-}
+mirror([0,1,0])
+// hip_plate ();
+// {
+// 	hip_bracket();
+// 	hip_motor();
+// }
 {
 	thigh_bracket();
 	thigh_motor();
 
 }
 
-{
+// {
 
-	shin_bracket();
-	knee_motor();
-	ankle_motor();
-}
-{
+// 	shin_bracket();
+// 	knee_motor();
+// 	ankle_motor();
+// }
+// {
 
-	foot_bracket();
-}
+// 	foot_bracket();
+// }
