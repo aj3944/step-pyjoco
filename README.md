@@ -39,3 +39,11 @@ For any questions, suggestions, or contributions, please reach out to aj3944@nyu
 ---
 
 This repository bridges the gap between mechanical design and control systems, enabling researchers, educators, and enthusiasts to explore humanoid robotics in an open-source and customizable environment.
+
+# Stair Traversal and Exploration Project (STEP)
+
+![](step.png)
+
+**Team STEP** at NYU is dedicated to advancing the capabilities of autonomous robots in navigating complex, stair-filled environments. The project focuses on designing and prototyping robotic systems with specialized hardware and control algorithms that enable precise movement on uneven and inclined surfaces. Leveraging sensor fusion techniques, STEP integrates LIDAR, IMUs, and vision systems to enhance real-time environmental perception and decision-making. The ultimate goal is to create robots capable of autonomous exploration and traversal in challenging terrains, with applications in search and rescue, urban exploration, and infrastructure inspection.
+
+As part of NYU's Vertically Integrated Projects (VIP) program, STEP offers students the chance to earn academic credit while contributing to cutting-edge research. Participants from various disciplines collaborate on long-term, multidisciplinary tasks, developing skills in robotics, control systems, and sensor integration. This project not only provides hands-on experience but also positions students to make impactful contributions to the field of autonomous robotics.
