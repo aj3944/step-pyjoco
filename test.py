@@ -69,14 +69,14 @@ global left_hip_yaw_ctrl,left_hip_pitch_ctrl,left_knee_pitch_ctrl,left_anke_roll
 global right_hip_yaw_ctrl,right_hip_pitch_ctrl,right_knee_pitch_ctrl,right_anke_roll_ctrl
 
 left_hip_yaw_ctrl = 0
-left_hip_pitch_ctrl = 0.5
+left_hip_pitch_ctrl = 0
 left_knee_pitch_ctrl = 0
 left_anke_roll_ctrl = 0
 
 unified_hip_yaw_ctrl = 0
 
 right_hip_yaw_ctrl = 0
-right_hip_pitch_ctrl = 0.5
+right_hip_pitch_ctrl = 0
 right_knee_pitch_ctrl = 0
 right_anke_roll_ctrl = 0
 
@@ -131,6 +131,7 @@ with mujoco.viewer.launch_passive(m, d) as viewer:
   while viewer.is_running() and time.time() - start < 300:
     step_start = time.time()
 
+    right_hip_pitch_ctrl = left_hip_pitch_ctrl
 
     # mj_step can be replaced with code that also evaluates
     # a policy and applies a control signal before stepping the physics.
@@ -139,7 +140,7 @@ with mujoco.viewer.launch_passive(m, d) as viewer:
     # for i in range(len(d.ctrl)):
     # 	d.ctrl[i] = 0
 
-
+    # sim.model.opt.gravity[:] = [0, 0, 0]
 
 
     g_x,g_y,g_z = d.sensordata[0],d.sensordata[1],d.sensordata[2]
@@ -161,24 +162,24 @@ with mujoco.viewer.launch_passive(m, d) as viewer:
     gain_d = 0.3
 
     # print(int_y)
-    omega =6
+    omega = 1
     
     # pid_y = delta_y - int_y*0.01;
 
     # ctrl_value = gain_p*beta_P + gain_d*beta_D + gain_i*beta_I
     # ctrl_value = 0
-    unified_hip_yaw_ctrl = sin(omega*step_start)*0.11
+    # unified_hip_yaw_ctrl = sin(omega*step_start)*0.11
 
-    left_hip_pitch_ctrl = 0.6 + sin(omega*step_start)*0.002
-    right_hip_pitch_ctrl = 0.6 + sin(pi + omega*step_start)*0.002
-    left_knee_pitch_ctrl = 0.005 + sin(pi + omega*step_start)*0.002
-    right_knee_pitch_ctrl = 0.005 + sin(omega*step_start)*0.002
+    left_hip_pitch_ctrl = 0.5 + sin(omega*step_start)*0.2
+    right_hip_pitch_ctrl = 0.5 + sin(pi + omega*step_start)*0.2
+    left_knee_pitch_ctrl = 0.005 + sin(pi + omega*step_start)*0.2
+    right_knee_pitch_ctrl = 0.005 + sin(omega*step_start)*0.2
 
 
 
-    # right_hip_pitch_ctrl = 0.5
     # left_anke_roll_ctrl =  0
     # right_anke_roll_ctrl =  0
+    # d.opt.gravity[:] = [0, 0, 0]
 
     d.ctrl[lhy] = unified_hip_yaw_ctrl 
     d.ctrl[lhp] = -2*left_hip_pitch_ctrl - left_knee_pitch_ctrl
@@ -200,10 +201,13 @@ with mujoco.viewer.launch_passive(m, d) as viewer:
     ax.draw_artist(line)
     fig.canvas.update()
     fig.canvas.flush_events()
-
+    print(dir(mujoco.mjtRndFlag))
     # Example modification of a viewer option: toggle contact points every two seconds.
     with viewer.lock():
-      viewer.opt.flags[mujoco.mjtVisFlag.mjVIS_CONTACTPOINT] = int(d.time % 2)
+      viewer.opt.flags[mujoco.mjtVisFlag.mjVIS_CONTACTPOINT] = 1
+      viewer.opt.flags[mujoco.mjtVisFlag.mjVIS_CONTACTFORCE] = 1
+      viewer.opt.flags[mujoco.mjtVisFlag.mjVIS_AUTOCONNECT] = 1
+      # viewer.opt.flags[mujoco.mjtVisFlag.mjVIS_AUTOCONNECT] = 1
 
     # Pick up changes to the physics state, apply perturbations, update options from GUI.
     viewer.sync()
