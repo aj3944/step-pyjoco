@@ -1,4 +1,7 @@
 from dm_control import mjcf
+from dm_control import suite
+from dm_control import viewer
+
 
 # class Arm:
 
@@ -34,21 +37,82 @@ from dm_control import mjcf
 #     right_shoulder_site.attach(self.right_arm.mjcf_model)
 
 
-# from dm_control import mjcf
+# The basic mujoco wrapper.
+from dm_control import mujoco
 
-# Parse from path
-# mjcf_model = mjcf.from_path("./step.xml")
-# with open("step.xml") as f:
-#   mjcf_model = mjcf.from_file(f)
+# Access to enums and MuJoCo library functions.
+from dm_control.mujoco.wrapper.mjbindings import enums
+from dm_control.mujoco.wrapper.mjbindings import mjlib
 
-with open("step.xml") as f:
-  xml_string = f.read()
+# PyMJCF
+from dm_control import mjcf
 
-try: 
-  mjcf_model = mjcf.from_xml_string(xml_string)
-except Exception as e:
-  print(e)
+# Composer high level imports
+from dm_control import composer
+from dm_control.composer.observation import observable
+from dm_control.composer import variation
 
-print(type(mjcf_model))  # <type 'mjcf.RootElement'>
+# Imports for Composer tutorial example
+from dm_control.composer.variation import distributions
+from dm_control.composer.variation import noises
+from dm_control.locomotion.arenas import floors
 
-physics = mjcf.Physics.from_mjcf_model(mjcf_model)
+# Control Suite
+from dm_control import suite
+
+# Run through corridor example
+from dm_control.locomotion.walkers import cmu_humanoid
+from dm_control.locomotion.arenas import corridors as corridor_arenas
+from dm_control.locomotion.tasks import corridors as corridor_tasks
+
+
+# General
+import copy
+import os
+import itertools
+from IPython.display import clear_output
+import numpy as np
+
+
+# Graphics-related
+import matplotlib
+import matplotlib.animation as animation
+import matplotlib.pyplot as plt
+from IPython.display import HTML
+import PIL.Image
+
+walker = cmu_humanoid.CMUHumanoidPositionControlledV2020(
+    observable_options={'egocentric_camera': dict(enabled=True)})
+
+arena = corridor_arenas.WallsCorridor(
+    wall_gap=3.,
+    wall_width=distributions.Uniform(2., 3.),
+    wall_height=distributions.Uniform(2.5, 3.5),
+    corridor_width=4.,
+    corridor_length=30.,
+)
+
+task = corridor_tasks.RunThroughCorridor(
+    walker=walker,
+    arena=arena,
+    walker_spawn_position=(0.5, 0, 0),
+    target_velocity=3.0,
+    physics_timestep=0.005,
+    control_timestep=0.03,
+)
+
+env = composer.Environment(
+    task=task,
+    time_limit=10,
+    random_state=np.random.RandomState(42),
+    strip_singleton_obs_buffer_dim=True,
+)
+env.reset()
+pixels = []
+for camera_id in range(3):
+  pixels.append(env.physics.render(camera_id=camera_id, width=240))
+img = PIL.Image.fromarray(np.hstack(pixels))
+
+img.show()
+
+

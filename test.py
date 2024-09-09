@@ -52,8 +52,8 @@ freq_sliderA = Slider(
 freq_sliderM = Slider(
     ax=axfreqM,
     label='M',
-    valmin=-1,
-    valmax=1,
+    valmin=-.1,
+    valmax=.1,
     valinit=0,
 )
 
@@ -69,9 +69,9 @@ global left_hip_yaw_ctrl,left_hip_pitch_ctrl,left_knee_pitch_ctrl,left_anke_roll
 global right_hip_yaw_ctrl,right_hip_pitch_ctrl,right_knee_pitch_ctrl,right_anke_roll_ctrl
 
 left_hip_yaw_ctrl = 0
-left_hip_pitch_ctrl = 0
+left_hip_pitch_ctrl = 0.5
 left_knee_pitch_ctrl = 0
-left_anke_roll_ctrl = 0
+left_anke_roll_ctrl = -0.01
 
 unified_hip_yaw_ctrl = 0
 
@@ -170,10 +170,10 @@ with mujoco.viewer.launch_passive(m, d) as viewer:
     # ctrl_value = 0
     # unified_hip_yaw_ctrl = sin(omega*step_start)*0.11
 
-    left_hip_pitch_ctrl = 0.5 + sin(omega*step_start)*0.2
-    right_hip_pitch_ctrl = 0.5 + sin(pi + omega*step_start)*0.2
-    left_knee_pitch_ctrl = 0.005 + sin(pi + omega*step_start)*0.2
-    right_knee_pitch_ctrl = 0.005 + sin(omega*step_start)*0.2
+    # left_hip_pitch_ctrl = 0.5 + sin(omega*step_start)*0.2
+    # right_hip_pitch_ctrl = 0.5 + sin(pi + omega*step_start)*0.2
+    # left_knee_pitch_ctrl = 0.005 + sin(pi + omega*step_start)*0.2
+    # right_knee_pitch_ctrl = 0.005 + sin(omega*step_start)*0.2
 
 
 
@@ -181,14 +181,14 @@ with mujoco.viewer.launch_passive(m, d) as viewer:
     # right_anke_roll_ctrl =  0
     # d.opt.gravity[:] = [0, 0, 0]
 
-    d.ctrl[lhy] = unified_hip_yaw_ctrl 
-    d.ctrl[lhp] = -2*left_hip_pitch_ctrl - left_knee_pitch_ctrl
-    d.ctrl[lkp] = left_hip_pitch_ctrl + left_knee_pitch_ctrl
-    d.ctrl[lar] = left_anke_roll_ctrl
-    d.ctrl[rhy] = unified_hip_yaw_ctrl 
-    d.ctrl[rhp] = -2*right_hip_pitch_ctrl
-    d.ctrl[rkp] = right_hip_pitch_ctrl  + right_knee_pitch_ctrl
-    d.ctrl[rar] = right_anke_roll_ctrl
+    d.ctrl[lhy] = left_hip_yaw_ctrl; 
+    d.ctrl[lhp] = -2*left_hip_pitch_ctrl;
+    d.ctrl[lkp] = left_hip_pitch_ctrl + left_knee_pitch_ctrl;
+    d.ctrl[lar] = left_anke_roll_ctrl;
+    d.ctrl[rhy] = left_hip_yaw_ctrl; 
+    d.ctrl[rhp] = -2*right_hip_pitch_ctrl;
+    d.ctrl[rkp] = right_hip_pitch_ctrl + right_knee_pitch_ctrl;
+    d.ctrl[rar] = left_anke_roll_ctrl;
     # print(left_hip_yaw_ctrl)
     # print(left_knee_pitch_ctrl)
     # print(left_anke_roll_ctrl)
@@ -201,7 +201,7 @@ with mujoco.viewer.launch_passive(m, d) as viewer:
     ax.draw_artist(line)
     fig.canvas.update()
     fig.canvas.flush_events()
-    print(dir(mujoco.mjtRndFlag))
+    # print(dir(mujoco.mjtRndFlag))
     # Example modification of a viewer option: toggle contact points every two seconds.
     with viewer.lock():
       viewer.opt.flags[mujoco.mjtVisFlag.mjVIS_CONTACTPOINT] = 1
