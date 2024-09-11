@@ -1,6 +1,7 @@
 
 module hip_bracket(){
-	difference(){
+	difference()
+	{
 
 		hull(){
 			translate([-30,-LINK_OFFSET_1,-30])
@@ -31,7 +32,7 @@ module hip_bracket(){
 			mg6012_mounting_holes(120);
 			mg6012_mounting_bumps();
 			translate([0,0,-30])
-			mg6012_mounting_holes(40,1);
+			mg6012_mounting_holes(40,3);
 
 		}
 

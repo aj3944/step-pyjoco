@@ -62,7 +62,7 @@
           <joint name="left_hip_pitch" pos="0 .1 -.12 " axis="0 1 0" range="-1.43 1.43"/>
           <!-- <geom type="mesh"  mesh="step_bot_left_hip_yaw_link" /> -->
           <geom class="collision" mesh="step_bot_left_hip_pitch_link"/>
-          <geom class="visual" mesh="step_bot_left_hip_pitch_link"/>
+          <geom name="knee" class="visual" mesh="step_bot_left_hip_pitch_link"/>
           <!-- <geom size="0.06 0.135" pos="-0.0 0 0" quat="0.707123 0 0.70709 0" type="cylinder" class="collision"/> -->
 
           <body name="step_bot_left_knee_link" pos="0 0.0 -0.0">
