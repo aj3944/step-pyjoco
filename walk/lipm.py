@@ -1,4 +1,4 @@
-from math import sin,cos,pi
+from math import sin,cos,pi,floor
 
 left_hip_yaw = 0
 left_hip_pitch = 1
@@ -37,21 +37,53 @@ class Controller():
 	right_anke_roll_ctrl = 0
 
 
-	def make_update(self,d):
+	curr_pos = []
+	goal_pos = []
 
-		print(d.time)
+	controls = [0]*8
+	step = 0;
 
-		t_hat = d.time/3;
+	def make_update(self,t = None,d = None):
 
-		# self.left_hip_pitch_ctrl = 0.5 + 0.2*sin(t_hat*0.5 + pi)**10;
-		# self.right_hip_pitch_ctrl = 0.5 - 0.2*sin(t_hat*0.5)**10;
+		if d is None and t is None:
+			raise
 
-		self.left_hip_pitch_ctrl = 0.5 ;
-		self.right_hip_pitch_ctrl = 0.5;
+		if d:
+			print(d.time)
+
+			if d.time < 1:
+				return 0
+			t = d.time
+		t_hat = t/3;
+
+		self.step += 0.1
+
+		step_h = floor(self.step/pi);
+
+		flex_l, flex_r = 0, 0
+		if step_h % 2 == 0:
+			march_l = -sin(self.step)*0.15
+			march_r = 0
+			# flex_l = flex_l*0.99
+			# flex_r = -cos(self.step)*0.1
+		else:
+			march_l = 0
+			march_r = sin(self.step)*0.15
+			# flex_l = cos(self.step)*0.1
+			# flex_r = flex_r*0.99
+		# march_l_val = march_l
+		# self.left_hip_pitch_ctrl = march_l;
+		# self.right_hip_pitch_ctrl = march_r;
+		flex_l = cos(self.step+0.75*pi)*0.02
+		flex_r = -cos(self.step+0.75*pi)*0.02
+		# self.left_hip_pitch_ctrl = 0.5 ;
+		# self.right_hip_pitch_ctrl = 0.5;
 
 
-		self.left_hip_yaw_ctrl = 0.16*sin(t_hat);
-		self.right_hip_yaw_ctrl = 0.16*sin(t_hat);
+		# self.left_hip_yaw_ctrl = 0.18*sin(t_hat);
+		# self.right_hip_yaw_ctrl = 0.18*sin(t_hat);
+
+
 
 		# self.left_hip_pitch_ctrl = 0.4 + 0.05*sin(t_hat*2);
 		# self.right_hip_pitch_ctrl = 0.4 + 0.05*cos(t_hat)*2;
@@ -61,12 +93,23 @@ class Controller():
 		# self.right_anke_roll_ctrl = -0.2*sin(t_hat*0.5)**10;
 		# self.right_anke_roll_ctrl = 0.05*cos(t_hat)*2;
 
+		self.controls[lhy] = self.left_hip_yaw_ctrl; 
+		self.controls[lhp] = -2*self.left_hip_pitch_ctrl + march_l;
+		self.controls[lkp] = self.left_hip_pitch_ctrl + self.left_knee_pitch_ctrl - 2*march_l;
+		self.controls[lar] = self.left_anke_roll_ctrl + flex_l;
+		self.controls[rhy] = self.right_hip_yaw_ctrl; 
+		self.controls[rhp] = -2*self.right_hip_pitch_ctrl + march_r;
+		self.controls[rkp] = self.right_hip_pitch_ctrl + self.right_knee_pitch_ctrl - 2*march_r;
+		self.controls[rar] = self.right_anke_roll_ctrl + flex_r;
 
-		d.ctrl[lhy] = self.left_hip_yaw_ctrl; 
-		d.ctrl[lhp] = -2*self.left_hip_pitch_ctrl;
-		d.ctrl[lkp] = self.left_hip_pitch_ctrl + self.left_knee_pitch_ctrl;
-		d.ctrl[lar] = self.left_anke_roll_ctrl;
-		d.ctrl[rhy] = self.right_hip_yaw_ctrl; 
-		d.ctrl[rhp] = -2*self.right_hip_pitch_ctrl;
-		d.ctrl[rkp] = self.right_hip_pitch_ctrl + self.right_knee_pitch_ctrl;
-		d.ctrl[rar] = self.right_anke_roll_ctrl;
+		if d:
+			d.ctrl[lhy] = self.left_hip_yaw_ctrl; 
+			d.ctrl[lhp] = -2*self.left_hip_pitch_ctrl + march_l;
+			d.ctrl[lkp] = self.left_hip_pitch_ctrl + self.left_knee_pitch_ctrl - 2*march_l;
+			d.ctrl[lar] = self.left_anke_roll_ctrl + flex_l;
+			d.ctrl[rhy] = self.right_hip_yaw_ctrl; 
+			d.ctrl[rhp] = -2*self.right_hip_pitch_ctrl + march_r;
+			d.ctrl[rkp] = self.right_hip_pitch_ctrl + self.right_knee_pitch_ctrl - 2*march_r;
+			d.ctrl[rar] = self.right_anke_roll_ctrl + flex_r;
+
+		return self.controls

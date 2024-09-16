@@ -87,6 +87,8 @@ module thigh_bracket()
 	{
 		mg6012_mounting_bumps(40);
 		mg6012_mounting_holes(40);
+			translate([0,0,-30])
+			mg6012_mounting_holes(40,3);
 	}
 
 		translate([0,-LINK_OFFSET_1,-LINK_LENGTH_3])
@@ -324,12 +326,12 @@ module hip_plate(){
 // mirror([0,1,0])
 // hip_plate ();
 // {
-	hip_bracket();
-// 	hip_motor();
+	// hip_bracket();
+	// hip_motor();
 // }
 // {
-// 	thigh_bracket();
-// 	thigh_motor();
+	// thigh_bracket();
+	// thigh_motor();
 
 // }
 

@@ -1,5 +1,5 @@
 <mujoco model="step_scene">
-  <include file="step.xml"/>
+  <include file="/home/va/om/step/sim/pyjoco/step.xml"/>
 
   <statistic center="0 0 1" extent="1.8"/>
 

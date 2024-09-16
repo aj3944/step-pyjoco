@@ -5,7 +5,7 @@ include <./actuators/ds5160.scad>
 include <./actuators/mg_90.scad>
 
 include <./upper_body.scad>
-include <./lower_bosy.scad>
+include <./lower_body.scad>
 
 
 
@@ -31,16 +31,16 @@ include <./lower_bosy.scad>
 
 
 // // // LEGS
-// hip_plate();
+hip_plate();
 
-// right_leg();
-// mirror([0,1,0])
-// right_leg();
+right_leg();
+mirror([0,1,0])
+right_leg();
 
-// // // TORSO
-// torso();
+// // // // TORSO
+torso();
 
-// // // ARMS
+// // // // ARMS
 // right_arm();
 
 // mirror([0,1,0])
