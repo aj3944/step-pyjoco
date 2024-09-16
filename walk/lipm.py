@@ -56,7 +56,7 @@ class Controller():
 			t = d.time
 		t_hat = t/3;
 
-		self.step += 0.1
+		self.step += 0.003
 
 		step_h = floor(self.step/pi);
 
@@ -80,8 +80,8 @@ class Controller():
 		# self.right_hip_pitch_ctrl = 0.5;
 
 
-		# self.left_hip_yaw_ctrl = 0.18*sin(t_hat);
-		# self.right_hip_yaw_ctrl = 0.18*sin(t_hat);
+		self.left_hip_yaw_ctrl = 0.18*sin(self.step);
+		self.right_hip_yaw_ctrl = 0.18*sin(self.step);
 
 
 

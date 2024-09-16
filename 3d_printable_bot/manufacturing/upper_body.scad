@@ -12,7 +12,7 @@ translate([0,-SHOULDER_OFFSET,SHOULDER_HEIGHT+45])
 translate([0,0,-70])
 cube(size=[100,20,20], center=true);
 
-translate([0,-SHOULDER_OFFSET/2,SHOULDER_HEIGHT/2])
+translate([0,-SHOULDER_OFFSET/2,SHOULDER_HEIGHT/1.5])
 cube(size=[150,20,20], center=true);
 
 // translate([0,-LINK_OFFSET_1 ,100])
@@ -52,11 +52,11 @@ module mid_plates(){
 	difference(){
 
 	sequentialHull(){
-		translate([0,-SHOULDER_OFFSET/2,SHOULDER_HEIGHT/2])
+		translate([0,-SHOULDER_OFFSET/2,SHOULDER_HEIGHT/1.5])
 		cube(size=[150,20,20], center=true);
-		translate([0,0,SHOULDER_HEIGHT/2])
+		translate([0,0,SHOULDER_HEIGHT/1.8])
 		cube(size=[200,20,20], center=true);
-		translate([0,SHOULDER_OFFSET/2,SHOULDER_HEIGHT/2])
+		translate([0,SHOULDER_OFFSET/2,SHOULDER_HEIGHT/1.5])
 		cube(size=[150,20,20], center=true);
 	}
 
@@ -293,8 +293,14 @@ rotate([0,180,180])
 {
 	mg6012();
 	mg6012_back_grip();	
+
+	difference(){
+
 	translate([0,0,-40])
 	cylinder(r=32,h=10,center=true);		
+
+
+	}
 
 }
 // translate([0,0,110])

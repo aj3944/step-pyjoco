@@ -11,7 +11,7 @@ import numpy as np
 
 from step import SUITE
 
-env = SUITE["stand"](100)
+env = SUITE["walk"](100)
 action_spec = env.action_spec()
 
 
@@ -20,9 +20,10 @@ lipm_lqr = Controller()
 physics = env.physics
 def lipm_policy(time_step):
 	t = physics.time()
-	print(time_step.reward)
+	r = time_step.reward
+	print(r)
 	# print(time_step.index())
-	q = lipm_lqr.make_update(t)
+	q = lipm_lqr.make_update(t,r)
 	return q 
 
 
