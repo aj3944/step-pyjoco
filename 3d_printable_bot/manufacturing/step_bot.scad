@@ -31,14 +31,14 @@ include <./lower_body.scad>
 
 
 // // // LEGS
-hip_plate();
+// hip_plate();
 
-right_leg();
-mirror([0,1,0])
-right_leg();
+// right_leg();
+// mirror([0,1,0])
+// right_leg();
 
 // // // // TORSO
-torso();
+// torso();
 
 // // // // ARMS
 // right_arm();

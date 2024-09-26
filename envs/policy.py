@@ -18,12 +18,15 @@ action_spec = env.action_spec()
 lipm_lqr = Controller()
 
 physics = env.physics
+k = 0 
 def lipm_policy(time_step):
+	global k
+	k += 0.001
 	t = physics.time()
 	r = time_step.reward
 	print(r)
-	# print(time_step.index())
-	q = lipm_lqr.make_update(t,r)
+	print(k)
+	q = lipm_lqr.make_update(k)
 	return q 
 
 

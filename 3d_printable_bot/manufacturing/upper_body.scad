@@ -288,28 +288,41 @@ module face_brackets(){
 }
 
 
-translate([0,0,140])
-rotate([0,180,180])
-{
-	mg6012();
-	mg6012_back_grip();	
+// translate([0,0,140])
+// rotate([0,180,180])
+// {
+// 	mg6012();
+// 	mg6012_back_grip();	
 
-	difference(){
+// 	difference(){
 
-	translate([0,0,-40])
-	cylinder(r=32,h=10,center=true);		
+// 	translate([0,0,-40])
+// 	cylinder(r=32,h=10,center=true);		
 
 
-	}
+// 	}
 
-}
+// }
 // translate([0,0,110])
 // rotate([0,0,90])
 
 
-translate([-80,15,105])
-rotate([90,0,180])
-{
-mg6012();
-mg6012_back_grip();	
-}
+// translate([-80,15,105])
+// rotate([90,0,180])
+// {
+// mg6012();
+// mg6012_back_grip();	
+// }
+// translate([0,0,140])
+// rotate([0,180,180])
+// {
+// 	mg6012();
+// 	mg6012_back_grip();	
+
+// 	difference(){
+
+// 	translate([0,0,-40])
+// 	cylinder(r=32,h=10,center=true);		
+
+
+// 	}

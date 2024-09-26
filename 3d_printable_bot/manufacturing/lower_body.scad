@@ -263,7 +263,7 @@ rotate([-90,0,0])
 module hip_motor(){
 
 translate([0,-LINK_OFFSET_1,0])
-rotate([45,0,90])
+rotate([0,0,90])
 mg6012();	
 }
 
@@ -294,40 +294,40 @@ module right_actuators(){
 
 module hip_plate(){
 	translate([-0,-LINK_OFFSET_1,0])
-	rotate([45,0,90])
+	rotate([0,0,90])
 	mg6012_back_grip();
 	translate([-0,LINK_OFFSET_1,0])
 	mirror([0,1,0])
-	rotate([45,0,90])
+	rotate([0,0,90])
 	mg6012_back_grip();
 
 
 	sequentialHull()
 	{
-	translate([10,LINK_OFFSET_1,14])
-	rotate([45,0,90])
+	translate([0,LINK_OFFSET_1,14])
+	rotate([0,0,90])
 	cylinder(r=32,h=5);		
-	translate([30,LINK_OFFSET_1,50])
-	rotate([15,0,90])
+	translate([0,LINK_OFFSET_1,50])
+	rotate([0,0,90])
 	cylinder(r=40,h=20);		
 	translate([0,80,55])
 	cylinder(r=45,h=25);		
 	translate([0,-80,55])
 	cylinder(r=45,h=25);		
-	translate([30,-LINK_OFFSET_1,50])
-	rotate([15,0,90])
+	translate([0,-LINK_OFFSET_1,50])
+	rotate([0,0,90])
 	cylinder(r=40,h=20);	
-	translate([10,-LINK_OFFSET_1,14])
-	rotate([45,0,90])
+	translate([0,-LINK_OFFSET_1,14])
+	rotate([0,0,90])
 	cylinder(r=32,h=5);	
 	}
 
 }
 // mirror([0,1,0])
-// hip_plate ();
+hip_plate ();
 // {
 	// hip_bracket();
-	// hip_motor();
+	hip_motor();
 // }
 // {
 	// thigh_bracket();

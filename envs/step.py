@@ -45,7 +45,7 @@ parent_dir_name = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
 def get_model_and_assets():
   """Returns a tuple containing the model XML string and a dict of assets."""
-  return common.read_model(parent_dir_name + '/scene.xml'), common.ASSETS
+  return common.read_model(parent_dir_name + '/scene_sim.xml'), common.ASSETS
 
 
 @SUITE.add('benchmarking')
