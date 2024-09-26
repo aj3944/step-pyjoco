@@ -4,9 +4,9 @@ from dm_control import viewer
 
 import numpy as np
 
-with open("step.xml") as f:
-  xml_string = f.read()
-mjcf_model = mjcf.from_xml_string(xml_string)
+# with open("../step.xml") as f:
+#   xml_string = f.read()
+# mjcf_model = mjcf.from_xml_string(xml_string)
 
 
 
