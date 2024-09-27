@@ -16,7 +16,6 @@ if __name__ == "__main__":
 
     # id_ = 0x143;
 
-    # frame = bytearray()
 
     # # frame.append(0xFF)
     # # frame.append(0x43)
@@ -51,17 +50,32 @@ if __name__ == "__main__":
     # frame_byte = bytearray.fromhex("aa c8 43 01 a1 00 00 00 e8 03 00 00 55") # torque control move
     # frame_byte = bytearray.fromhex("aa c8 43 01 a2 00 00 00 e8 03 00 00 55") # speed control move
     frame_byte = bytearray.fromhex("aa c8 43 01 a5 00 00 00 00 cc 00 00 55") # position control move
-    uca.serial_device.write(bytes(frame_byte))
+    frame = bytearray()
+    frame.append(0xaa)
+    frame.append(0xc8)
+    frame.append(0x43)
+    frame.append(0x01)
+    frame.append(0xa5)
+    frame.append(0x00)
+    frame.append(0x00)
+    frame.append(0x00)
+    frame.append(0x00)
+    frame.append(0xaa)
+    frame.append(0x00)
+    frame.append(0x00)
+    frame.append(0x55)
+
+    uca.serial_device.write(bytes(frame))
     # uca.frame_send(frame)
     # while 1:
-    started = True;
-    while started:
-        byte = uca.serial_device.read(1)
-        print(byte.hex(),end = " ")
-        # print(byte.hex() == '55')
-        if byte.hex() == '55':
-            started = False
-            print()
+    # started = True;
+    # while started:
+    #     byte = uca.serial_device.read(1)
+    #     print(byte.hex())
+    #     # print(byte.hex() == '55')
+    #     if byte.hex() == '55':
+    #         started = False
+    #         print()
     # uca.dump_data_frames(0)
     # uca.frame_send(test)
     # print(uca.convert_from_hex(data2))
@@ -78,7 +92,7 @@ if __name__ == "__main__":
     #     else:
     #         frame = uca.extract_data(uca.frame)
     #         print(frame)
-    #         # data = imu.interpret_frame(uca.extract_data(uca.frame))
+            # data = imu.interpret_frame(uca.extract_data(uca.frame))
 
     #     # try:
     #     #     roll, pitch, yaw = data["Roll"], data["Pitch"], data["Yaw"]

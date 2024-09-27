@@ -37,6 +37,6 @@ with mujoco.viewer.launch_passive(m, d) as viewer:
 		# a policy and applies a control signal before stepping the physics.
 
 		mujoco.mj_step(m, d)
-		lipm_lqr.make_update(d)
+		lipm_lqr.make_update(0,d)
 		# Pick up changes to the physics state, apply perturbations, update options from GUI.
 		viewer.sync()
