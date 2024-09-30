@@ -33,6 +33,8 @@ def single_loop_angle_read(motor_id = 1):
 	frame.append(0x55)
 	return bytes(frame)
 
+
+
 # angleIncrement is int32_t, corresponding actual position is 0.01degree/LSB, i.e 36000
 # corresponding to 360°,motor spin direction is determined by the symbol of parameter.
 def increment_angle(motor_id = 1,angleIncrement = 0):

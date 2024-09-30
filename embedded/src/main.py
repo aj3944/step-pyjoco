@@ -9,9 +9,9 @@ CANUSB_TTY_BAUD_RATE_DEFAULT = 2000000
 uca_serial_device = serial.Serial("/dev/ttyUSB0", baudrate=CANUSB_TTY_BAUD_RATE_DEFAULT, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_TWO, timeout=0.000001)
 
 
-uca_serial_device.write(motor_on(1))
-# uca_serial_device.write(motor_on(2))
-uca_serial_device.write(motor_on(3))
+# uca_serial_device.write(motor_on(1))
+# # uca_serial_device.write(motor_on(2))
+# uca_serial_device.write(motor_on(3))
 # uca_serial_device.write(motor_off(1))
 # uca_serial_device.write(motor_off(2))
 # uca_serial_device.write(motor_off(3))
