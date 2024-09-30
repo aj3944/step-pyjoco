@@ -326,22 +326,22 @@ module hip_plate(){
 // mirror([0,1,0])
 hip_plate ();
 // {
-	// hip_bracket();
+	hip_bracket();
 	hip_motor();
 // }
 // {
-	// thigh_bracket();
-	// thigh_motor();
+	thigh_bracket();
+	thigh_motor();
 
 // }
 
+{
+
+	shin_bracket();
+	knee_motor();
+	ankle_motor();
+}
 // {
 
-// 	shin_bracket();
-// 	knee_motor();
-// 	ankle_motor();
-// }
-// {
-
-	// foot_bracket_rounded();
+	foot_bracket_rounded();
 // }

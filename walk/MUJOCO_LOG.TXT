@@ -16,3 +16,6 @@ ERROR: could not initialize GLFW
 Fri Sep 27 14:25:35 2024
 ERROR: could not initialize GLFW
 
+Fri Sep 27 17:09:18 2024
+ERROR: could not initialize GLFW
+
