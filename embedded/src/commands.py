@@ -72,11 +72,12 @@ def multi_loop_angle_speed_control(motor_id=1,angleControl=0,speedControl=0):
 	frame.append(0x40 + motor_id)
 	frame.append(0x01)
 	frame.append(0xa4)
-	frame.appened(0x00)
+	frame.append(0x00)
 	[ frame.append(x) for x in speedControl.to_bytes(2, 'little', signed=True) ]
 	[ frame.append(x) for x in angleControl.to_bytes(4, 'little', signed=True) ]
 	frame.append(0x55)
 	return bytes(frame)
+
 
 def single_loop_angle_control(motor_id = 1,angleAbsolute = 0,direction = 0x00):
 	frame = bytearray()
@@ -96,12 +97,12 @@ def single_loop_angle_speed_control(motor_id=1,angleAbsolute=0,direction=0x00,sp
 	frame = bytearray()
 	frame.append(0xaa)
 	frame.append(0xc8)
-	frame.appened(0x40 + motor_id)
+	frame.append(0x40 + motor_id)
 	frame.append(0x01)
 	frame.append(0xa6)
-	frame.appened(direction)
-	[ frame.appened(x) for x in speedControl.to_bytes(2, 'little', signed=True)]
-	[ frame.appened(x) for x in angleAbsolute.to_bytes(4, 'little', signed=True)]
+	frame.append(direction)
+	[ frame.append(x) for x in speedControl.to_bytes(2, 'little', signed=True)]
+	[ frame.append(x) for x in angleAbsolute.to_bytes(4, 'little', signed=True)]
 	frame.append(0x55)
 	return bytes(frame)
 
@@ -112,11 +113,23 @@ def torque_speed_control(motor_id=1, iqControl=0, speedControl=0):
 	frame.append(0x40 + motor_id)
 	frame.append(0x01)
 	frame.append(0xa8)
-	frame.appened(0x00)
-	[ frame.appened(x) for x in speedControl.to_bytes(2,'little',signed=True) ]
-	[ frame.appened(x) for x in iqControl.to_bytes(4,'little',signed=True) ]
-	frame.appened(0x55)
+	frame.append(0x00)
+	[ frame.append(x) for x in speedControl.to_bytes(2,'little',signed=True) ]
+	[ frame.append(x) for x in iqControl.to_bytes(4,'little',signed=True) ]
+	frame.append(0x55)
 	return bytes(frame)	
+# def increment_angle2(motor_id = 1,angleIncrement = 0, max_speed = 0):
+# 	frame = bytearray()
+# 	frame.append(0xaa)
+# 	frame.append(0xc8)
+# 	frame.append(0x40 + motor_id)
+# 	frame.append(0x01)
+# 	frame.append(0xa8)
+# 	frame.append(0x00)
+# 	[ frame.append(x) for x in max_speed.to_bytes(2,'little', signed=True)]
+# 	[ frame.append(x) for x in angleIncrement.to_bytes(4,'little', signed=True)]
+# 	frame.append(0x55)
+# 	return bytes(frame)	
 
 def single_loop_angle_read(motor_id = 1):
 	frame = bytearray()
@@ -220,7 +233,7 @@ def clear_motor_state(motor_id = 1):
 	return bytes(frame)
 
 #Host send this command to set encoder offset. EncoderOffset is uint16_t,14bit encoder range is 0~16383.
-def write_encoder_value_to_rom_as_zero (motor_id = 1, encoder_offset = 0):
+def write_encoder_value_to_rom_as_zero(motor_id = 1, encoder_offset = 0):
     frame = bytearray()
     frame.append(0xaa)
     frame.append(0xc8)
