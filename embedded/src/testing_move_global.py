@@ -20,6 +20,7 @@ time.sleep(1)
 # shin_left.motor_arm()
 # Define maximum speed based on protocol: 36000 corresponds to 360 dps
 max_speed = 1800 # Maximum speed
+testing_angle=120 #testing angle
 
 # Perform pre-warning movement: move 10 degrees left, then right, and return to initial position
 def pre_warning_movement():
@@ -88,7 +89,7 @@ r = cv.getTrackbarPos('R', 'controls')
 
 for i in range(10):
     print(f"Iteration {i+1}")
-    fast_move_and_return(120,False)  # Step 3 & 4: fast move to 60 degrees and slow return
+    fast_move_and_return(testing_angle,False)  # Step 3 & 4: fast move to 60 degrees and slow return
 
 
 
