@@ -3,7 +3,7 @@ import time
 import random
 import serial
 
-from commands import multi_loop_angle_speed_control,read_motor_state_1,torque_control,single_loop_angle_read,single_loop_angle_speed_control
+from commands import multi_loop_angle_speed_control,read_motor_state_1,torque_control,single_loop_angle_read,single_loop_angle_speed_control,read_motor_state_3,read_motor_state_2
 
 CANUSB_TTY_BAUD_RATE_DEFAULT = 2000000
 # uca_serial_device = serial.Serial("/dev/ttyUSB1", baudrate=CANUSB_TTY_BAUD_RATE_DEFAULT, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_TWO, timeout=0.000001)
@@ -52,6 +52,35 @@ def parse_state(frame):
 	# print("Encoder Offset:", int.from_bytes(frame[10:11],byteorder='little', signed=False), end = '\n')
 	return frame[5]
 
+def parse_torque_current(frame): 
+	if not len(frame) == 13 or not frame[4] == 0x9c:
+		return
+	#print("ID:", frame[2] - 0x40, end = '\t')
+	#print("Function:", hex(frame[4]), end = '\t')
+	#print("Temprature:", frame[5], end = '\t')
+	torque_current = int.from_bytes(frame[6:8],byteorder='little', signed=True)
+	#print("torque current:", torque_current, end = '\t')
+	#motor_speed = int.from_bytes(frame[8:10],byteorder='little', signed=True),
+	#print("motor speed:", motor_speed,  end = '\t')
+	#encoder_position = int.from_bytes(frame[10:12],byteorder='little', signed=True),
+	#print("encoder_position:", encoder_position, end = '\n')
+	return torque_current
+
+def parse_phase_current(frame): 
+	if not len(frame) == 13 or not frame[4] == 0x9d :
+		return
+	#print("ID:", frame[2] - 0x40, end = '\t')
+	#print("Function:", hex(frame[4]), end = '\t')
+	#print("Temprature:", frame[5], end = '\t')
+	A_phase = int.from_bytes(frame[6:8],byteorder='little', signed=True)
+	print("A phase current:", A_phase, end = '\t')
+	B_phase = int.from_bytes(frame[8:10],byteorder='little', signed=True),
+	print("B phase current:", B_phase[0],  end = '\t')
+	C_phase = int.from_bytes(frame[10:12],byteorder='little', signed=True),
+	print("C phase current:", C_phase[0], end = '\n')
+	return A_phase, B_phase[0], C_phase[0]
+
+
 
 class motor():
 	motor_id = -1
@@ -64,6 +93,7 @@ class motor():
 	device = None
 	response_frames = []
 	curr_temp = 0
+	curr_i = 0
 	cf_factor = 1.251281695;
 
 	def __init__(self, id_, uca):
@@ -208,3 +238,46 @@ class motor():
 			# 		self.torque_control_move(-1*max_torque)
 			# 		self.read_single_loop()
 			# 	delta = deg - self.curr_deg;
+
+	def read_state3(self):
+		self.device.write(read_motor_state_3(self.motor_id))
+		time.sleep(0.01)
+		byte_list = self.device.read(self.device.in_waiting)
+		frame = []
+		for byte in byte_list:
+			if byte == 0xaa:
+				self.response_frames.append(frame)
+				frame = []
+				frame.append(byte)
+			else:
+				frame.append(byte)
+		self.response_frames.append(frame)
+		# print(self.response_frames)
+		for frame in self.response_frames:
+			#print(frame)
+			curr_phases = parse_phase_current(frame)	
+			if not curr_phases == None:
+				self.curr_i = curr_phases
+				# print(self.curr_phases)
+
+	def read_state2(self): 
+		self.device.write(read_motor_state_2(self.motor_id))
+		time.sleep(0.01)
+		byte_list = self.device.read(self.device.in_waiting)
+		frame = []
+		for byte in byte_list:
+			if byte == 0xaa:
+				self.response_frames.append(frame)
+				frame = []
+				frame.append(byte)
+			else:
+				frame.append(byte)
+		self.response_frames.append(frame)
+		# print(self.response_frames)
+		for frame in self.response_frames:
+			#print(frame)
+			torque_curr = parse_torque_current(frame)	
+			if not torque_curr == None:
+				self.curr_i = torque_curr
+				#print(torque_curr)
+				
