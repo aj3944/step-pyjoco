@@ -106,7 +106,7 @@ def single_loop_angle_speed_control(motor_id=1,angleAbsolute=0,direction=0x00,sp
 	frame.append(0x55)
 	return bytes(frame)
 
-def torque_speed_control(motor_id=1, iqControl=0, speedControl=0): 
+def increment_angle_speed(motor_id=1, speed=0, speedControl=0): 
 	frame = bytearray()
 	frame.append(0xaa)
 	frame.append(0xc8)
@@ -115,7 +115,7 @@ def torque_speed_control(motor_id=1, iqControl=0, speedControl=0):
 	frame.append(0xa8)
 	frame.append(0x00)
 	[ frame.append(x) for x in speedControl.to_bytes(2,'little',signed=True) ]
-	[ frame.append(x) for x in iqControl.to_bytes(4,'little',signed=True) ]
+	[ frame.append(x) for x in speed.to_bytes(4,'little',signed=True) ]
 	frame.append(0x55)
 	return bytes(frame)	
 # def increment_angle2(motor_id = 1,angleIncrement = 0, max_speed = 0):

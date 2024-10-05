@@ -2,35 +2,53 @@ import cv2 as cv
 from motor import motor,device
 import time
 
-uca = device("/dev/ttyUSB2")
+uca = device("/dev/ttyUSB0")
 
 
 shin_left = motor(3,uca.port())
 
-shin_left.motor_arm()
+shin_left.motor_disarm()
 
 # print(shin_left.goal_pos)
 
-shin_left.read_motor_encoder()
-shin_left.move_degrees_abs(1000)
-shin_left.read_motor_encoder()
+# shin_left.read_motor_encoder()
+# shin_left.move_degrees_abs(1000)
+# shin_left.read_motor_encoder()
 
 time.sleep(1)
-shin_left.read_motor_encoder()
+# shin_left.read_motor_encoder()
+shin_left.motor_arm()
 
 
 
 mult = 1;
-speed = 1000;
+speed = 500000;
 
 
+target = 0
 
 def callback(x):
+	global target
 	print("x\t",x)
 	# shin_left.goto(int(x*803/mult),speed)
 	# shin_left.goto(int(x),speed)
-	shin_left.read_state()
-	# shin_left.read()
+	# shin_left.read_state()
+	# shin_left.move_to(x,20,1)
+	# deg = x*803;
+
+
+	# direction = deg - target + 0.0000001
+
+	# target = deg
+	# d = -abs(direction)/direction
+	# if d < 0:
+	# 	d = 0
+	# else:
+	# 	d = 1
+	# print(deg)
+	# shin_left.goto_single_loop(deg,d,10000)
+	# shin_left.read_single_loop()
+	shin_left.move_to(x,20);
 
 cv.namedWindow('controls')
 cv.createTrackbar('R','controls',0,360*mult,callback)
@@ -38,5 +56,13 @@ cv.createTrackbar('R','controls',0,360*mult,callback)
 r = cv.getTrackbarPos('R','controls')
 
 k = cv.waitKey(0)
+
+# cf_factor = 1.251281695;
+
+
+# for i in range(100000):
+# 	shin_left.read_single_loop()
+# 	print(shin_left.curr_deg)
+# 	# shin_left.read()
 
 # print(shin_left.goal_pos)
