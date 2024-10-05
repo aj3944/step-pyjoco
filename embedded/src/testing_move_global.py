@@ -13,13 +13,13 @@ uca = device("/dev/tty.usbserial-14140")
 shin_left = motor(3, uca.port())
 
 # Disarm the motor to make sure it starts in a safe state
-shin_left.motor_disarm()
+shin_left.motor_arm()
 
 # Arm the motor for operation
 time.sleep(1)
-shin_left.motor_arm()
+# shin_left.motor_arm()
 # Define maximum speed based on protocol: 36000 corresponds to 360 dps
-max_speed = 20000  # Maximum speed
+max_speed = 1800 # Maximum speed
 
 # Perform pre-warning movement: move 10 degrees left, then right, and return to initial position
 def pre_warning_movement():
@@ -39,7 +39,7 @@ def pre_warning_movement():
 def fast_move_and_return(target_angle, active_Warning):
     Not_Reach_Target_1 = True
     Not_Reach_Target_2 = True
-    tolerance=10
+    tolerance=1
     if active_Warning:
         pre_warning_movement()
     
@@ -47,8 +47,8 @@ def fast_move_and_return(target_angle, active_Warning):
     shin_left.goto_single_loop(target_angle * 803, 0, max_speed)  # Fast move to target_angle (max speed)
     
     while Not_Reach_Target_1:
-        shin_left.read()
-        if abs(shin_left.curr_pos-8780)<tolerance:
+        shin_left.read_single_loop()
+        if abs(shin_left.curr_deg-target_angle)<tolerance:
             Not_Reach_Target_1 = False
 
     print("Returning to initial position.")
@@ -56,8 +56,8 @@ def fast_move_and_return(target_angle, active_Warning):
     
     
     while Not_Reach_Target_2:
-        shin_left.read()
-        if abs(shin_left.curr_pos-52144)<tolerance:
+        shin_left.read_single_loop()
+        if abs(shin_left.curr_deg-0)<tolerance:
             Not_Reach_Target_2 = False
 
     
@@ -86,11 +86,13 @@ r = cv.getTrackbarPos('R', 'controls')
 #print(f"Iteration {i + 1}:")
 
 
-for i in range(20):
+for i in range(10):
     print(f"Iteration {i+1}")
-    fast_move_and_return(60,False)  # Step 3 & 4: fast move to 60 degrees and slow return
-    
-time.sleep(3)
+    fast_move_and_return(120,False)  # Step 3 & 4: fast move to 60 degrees and slow return
+
+
+
+time.sleep(2)
 shin_left.goto_single_loop(0, 0, max_speed // 2)    # Return to initial position
 
 # Wait for the trackbar input indefinitely
