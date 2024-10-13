@@ -11,7 +11,7 @@ def moving_average(a, n):
 def soft_log(x,max_,k):
     return -max_/2+max_/(1+exp(-x*k))
 def detect_touch(): 
-    speed = 720
+    speed = 7200
     location = 0
 
     test_motor.motor_disarm()
@@ -63,6 +63,9 @@ def detect_touch():
     err = 0
     err_p = 0
     err_i = 0
+
+    i_prev = 0
+    i_delta = 0
     while True:
         test_motor.read_state2()
         test_motor.read_single_loop()
@@ -114,33 +117,53 @@ def detect_touch():
         time.sleep(0.001)
         curr_t = time.time()
         delta_t = curr_t - start 
-        print("target: {:.2f}".format(target),end="\t")
+        print("t_mode:", t_mode,end="\n")
+        print("target: {:.2f}".format(target),end="\n")
 
-        if delta_t > 3 and abs(test_motor.curr_i) > 10 and not t_mode:
-            target = test_motor.curr_deg
+
+        if delta_t < 3:
+            continue
+        
+        target = location/803
+        err = target-test_motor.curr_deg
+        t_val = Kp*(err)
+        i_delta = test_motor.curr_i - i_prev
+        i_prev = test_motor.curr_i
+
+        if not t_mode:
             t_mode = True
-            err = 0
-            err_p = 0
-            err_i = 0
-        if t_mode:
-            err = target-test_motor.curr_deg
-            err = soft_log(err,35,0.5)
-            err_d = err - err_p
-            err_i += err*0.5
-            err_i *= 0.9
-            # err_i *= 0.8
-            err_p = err
-            print("err:{:.2f}".format(err),end="\t")
-            print("err_d:{:.2f}".format(err_d),end="\t")
-            print("err_i:{:.2f}".format(err_i),end="\t")
-            t_val = Kp*(err) + Kd*(err_d) + Ki*err_i;
-            # if t_val > 100:
-            # t_val *= 0.
-            print("q:{:.2f}".format(t_val))
-        if t_mode and abs(err) > 1:
+            print(err)
+            print(t_val)
             test_motor.torque_control_move(int(t_val))
-        if t_mode and abs(err) < 1:
-            test_motor.torque_control_move(0)
+        if t_mode:
+            print("err:{:.2f}".format(err),end="\t")            
+            if abs(err) > 5 and abs(test_motor.curr_i) < 20:
+                # test_motor.goto_single_loop(target,0,speed)
+                delta_angle = ((target - test_motor.curr_deg))*800
+                print(delta_angle)
+                test_motor.increment(delta_angle,300)
+            else:
+                t_mode = False
+
+        # if t_mode:
+        #     err = target-test_motor.curr_deg
+        #     err = soft_log(err,35,0.5)
+        #     err_d = err - err_p
+        #     err_i += err*0.5
+        #     err_i *= 0.9
+        #     # err_i *= 0.8
+        #     err_p = err
+        #     print("err:{:.2f}".format(err),end="\t")
+        #     print("err_d:{:.2f}".format(err_d),end="\t")
+        #     print("err_i:{:.2f}".format(err_i),end="\t")
+        #     t_val = Kp*(err) + Kd*(err_d) + Ki*err_i;
+        #     # if t_val > 100:
+        #     # t_val *= 0.
+        #     print("q:{:.2f}".format(t_val))
+        # if t_mode and abs(err) > 1:
+        #     test_motor.torque_control_move(int(t_val))
+        # if t_mode and abs(err) < 1:
+        #     test_motor.torque_control_move(0)
         # if t_mode and test_motor.curr_i < 50:
         #     delta_angle = int(target - test_motor.curr_deg)
         #     test_motor.increment(delta_angle,speed)

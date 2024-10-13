@@ -132,9 +132,9 @@ class motor():
 			if not encoder_1 == None:
 				self.curr_encod1 = encoder_1
 	def increment(self,angle):
-		self.device.write(increment_angle(self.motor_id,angle))
+		self.device.write(increment_angle(self.motor_id,int(angle)))
 	def increment(self,angle,speed):
-		self.device.write(increment_angle_speed(self.motor_id,angle,speed))
+		self.device.write(increment_angle_speed(self.motor_id,int(angle),speed))
 	def goto_single_loop(self,angle,direction,speed):
 		self.device.write(single_loop_angle_speed_control(self.motor_id,angle,direction,speed))
 	def read(self):
