@@ -47,7 +47,7 @@ def detect_touch():
     line2, = ax2.plot(curr_deg)
     plt.show(block=False)
     ax1.set_ylabel("torque current")
-    ax2.set_ylabel("encoder_value")
+    ax2.set_ylabel("i_to_zero")
 
     start = time.time()
     t_mode = False
@@ -66,6 +66,7 @@ def detect_touch():
 
     i_prev = 0
     i_delta = 0
+    i_to_zero = 0
     while True:
         test_motor.read_state2()
         test_motor.read_single_loop()
@@ -77,7 +78,7 @@ def detect_touch():
         # all_vals.append(np.interp(test_motor.curr_i, [-2048,2048], [-33,33]))
         all_vals.append(test_motor.curr_i)
         # curr_deg.append(test_motor.curr_encod1)
-        curr_deg.append(test_motor.curr_deg)
+        curr_deg.append(i_delta)
         all_vals.pop(0)
         curr_deg.pop(0)
         line.set_ydata(all_vals)
@@ -127,8 +128,12 @@ def detect_touch():
         target = location/803
         err = target-test_motor.curr_deg
         t_val = Kp*(err)
-        i_delta = test_motor.curr_i - i_prev
+        i_delta = (test_motor.curr_i - i_prev)
         i_prev = test_motor.curr_i
+
+        i_to_zero = i_prev*i_delta/(abs(i_prev)+0.001)/(abs(i_delta)+0.001)
+
+        print("i_to_zero",i_to_zero)
 
         if not t_mode:
             t_mode = True
@@ -137,7 +142,7 @@ def detect_touch():
             test_motor.torque_control_move(int(t_val))
         if t_mode:
             print("err:{:.2f}".format(err),end="\t")            
-            if abs(err) > 5 and abs(test_motor.curr_i) < 20:
+            if abs(err) > 5 and i_to_zero < -20:
                 # test_motor.goto_single_loop(target,0,speed)
                 delta_angle = ((target - test_motor.curr_deg))*800
                 print(delta_angle)
