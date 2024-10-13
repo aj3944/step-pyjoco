@@ -19,13 +19,13 @@ def parse_encoder(frame):
 	# print(len(frame))
 	if not len(frame) == 13 or not frame[4] == 0x90 :
 		return
-	print("ID:", frame[2] - 0x40, end = '\t')
-	print("Function:", hex(frame[4]), end = '\t')
-	print("Next:", hex(frame[5]), end = '\t')
+	# print("ID:", frame[2] - 0x40, end = '\t')
+	# print("Function:", hex(frame[4]), end = '\t')
+	# print("Next:", hex(frame[5]), end = '\t')
 	encoder_val = int.from_bytes(frame[6:8],byteorder='little', signed=False)
-	print("Encoder:", encoder_val, end = '\t')
-	print("Encoder Raw:", int.from_bytes(frame[8:10],byteorder='little', signed=False), end = '\t')
-	print("Encoder Offset:", int.from_bytes(frame[10:12],byteorder='little', signed=False), end = '\n')
+	# print("Encoder:", encoder_val, end = '\t')
+	# print("Encoder Raw:", int.from_bytes(frame[8:10],byteorder='little', signed=False), end = '\t')
+	# print("Encoder Offset:", int.from_bytes(frame[10:12],byteorder='little', signed=False), end = '\n')
 	return encoder_val
 
 def parse_single_loop(frame):
@@ -93,6 +93,7 @@ class motor():
 	device = None
 	response_frames = []
 	curr_temp = 0
+	curr_encod1 = 0
 	curr_i = 0
 	cf_factor = 1.251281695;
 
@@ -127,7 +128,9 @@ class motor():
 		self.response_frames.append(frame)
 		for frame in self.response_frames:
 			# print(frame)
-			parse_encoder(frame)
+			encoder_1 = parse_encoder(frame)
+			if not encoder_1 == None:
+				self.curr_encod1 = encoder_1
 	def increment(self,angle):
 		self.device.write(increment_angle(self.motor_id,angle))
 	def increment(self,angle,speed):
@@ -153,10 +156,10 @@ class motor():
 			curr_pos = parse_encoder(frame)	
 			if not curr_pos == None:
 				self.curr_pos = curr_pos
-				print(self.curr_pos)
+				# print(self.curr_pos)
 	def read_single_loop(self):
 		self.device.write(single_loop_angle_read(self.motor_id))
-		time.sleep(0.001)
+		time.sleep(0.01)
 		byte_list = self.device.read(self.device.in_waiting)
 		frame = []
 		for byte in byte_list:
@@ -168,12 +171,12 @@ class motor():
 				frame.append(byte)
 		# self.response_frames.append(frame)
 		# for frame in self.response_frames:
-		# 	# print(frame)
+		# print(frame)
 		if not frame == []: 
 			curr_sl = parse_single_loop(frame)	
 			if not curr_sl == None:
 				self.curr_deg = self.cf_factor*curr_sl*0.001
-				print(self.curr_deg)
+				# print(self.curr_deg)
 	def read_state(self):
 		self.device.write(read_motor_state_1(self.motor_id))
 		time.sleep(0.01)
