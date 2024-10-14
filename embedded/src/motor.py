@@ -114,7 +114,7 @@ class motor():
 	def read_motor_encoder(self):
 		# self.curr_pos
 		self.device.write(read_encoder(self.motor_id))
-		time.sleep(0.01)
+		time.sleep(0.04)
 		byte_list = self.device.read(self.device.in_waiting)
 		# print(byte_list)
 		frame = []
@@ -159,7 +159,7 @@ class motor():
 				# print(self.curr_pos)
 	def read_single_loop(self):
 		self.device.write(single_loop_angle_read(self.motor_id))
-		time.sleep(0.01)
+		time.sleep(0.004)
 		byte_list = self.device.read(self.device.in_waiting)
 		frame = []
 		for byte in byte_list:
@@ -179,7 +179,7 @@ class motor():
 				# print(self.curr_deg)
 	def read_state(self):
 		self.device.write(read_motor_state_1(self.motor_id))
-		time.sleep(0.01)
+		time.sleep(0.001)
 		byte_list = self.device.read(self.device.in_waiting)
 		frame = []
 		for byte in byte_list:
@@ -244,7 +244,7 @@ class motor():
 
 	def read_state3(self):
 		self.device.write(read_motor_state_3(self.motor_id))
-		time.sleep(0.01)
+		time.sleep(0.001)
 		byte_list = self.device.read(self.device.in_waiting)
 		frame = []
 		for byte in byte_list:
@@ -265,7 +265,7 @@ class motor():
 
 	def read_state2(self): 
 		self.device.write(read_motor_state_2(self.motor_id))
-		time.sleep(0.01)
+		time.sleep(0.001)
 		byte_list = self.device.read(self.device.in_waiting)
 		frame = []
 		for byte in byte_list:

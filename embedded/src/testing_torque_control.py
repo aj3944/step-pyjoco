@@ -43,11 +43,11 @@ def detect_touch():
     avg = [-33]*100 + [33]*100 
     fig, (ax1, ax2) = plt.subplots(1,2, sharey=False, sharex=True)
     # fig, ax1 = plt.subplots(1,1, sharey=False, sharex=True)
-    line, = ax1.plot(all_vals)
-    line2, = ax2.plot(curr_deg)
-    plt.show(block=False)
-    ax1.set_ylabel("torque current")
-    ax2.set_ylabel("encoder_value")
+    # line, = ax1.plot(all_vals)
+    # line2, = ax2.plot(curr_deg)
+    # plt.show(block=False)
+    # ax1.set_ylabel("torque current")
+    # ax2.set_ylabel("encoder_value")
 
     start = time.time()
     t_mode = False
@@ -56,13 +56,14 @@ def detect_touch():
 
 
 
-    Kp = 1.75
-    Kd = 2.5
-    Ki = 0.5
+    Kp = 1
+    Kd = 26.8
+    Ki = 0.000000001
 
     err = 0
     err_p = 0
     err_i = 0
+    t_val = 0
     while True:
         test_motor.read_state2()
         test_motor.read_single_loop()
@@ -77,23 +78,23 @@ def detect_touch():
         curr_deg.append(test_motor.curr_deg)
         all_vals.pop(0)
         curr_deg.pop(0)
-        line.set_ydata(all_vals)
-        line2.set_ydata(curr_deg)
-        ax1.draw_artist(ax1.patch)
-        ax1.draw_artist(line)
+        # line.set_ydata(all_vals)
+        # line2.set_ydata(curr_deg)
+        # # ax1.draw_artist(ax1.patch)
+        # ax1.draw_artist(line)
 
 
-        ax2.relim()
-        ax2.autoscale_view()
+        # ax2.relim()
+        # ax2.autoscale_view()
 
-        ax1.relim()
-        ax1.autoscale_view()
+        # ax1.relim()
+        # ax1.autoscale_view()
 
         # print(test_motor.curr_encod1)
         # print(test_motor.curr_deg)
         # print(test_motor.curr_i)
-        ax2.draw_artist(ax2.patch)
-        ax2.draw_artist(line2)
+        # ax2.draw_artist(ax2.patch)
+        # ax2.draw_artist(line2)
 
         avg = moving_average(all_vals, 10) 
         deriv = np.gradient(avg, 1) 
@@ -106,12 +107,12 @@ def detect_touch():
         # ax2.draw_artist(ax2.patch)
         # ax2.draw_artist(line2) 
 
-        fig.canvas.draw()
-        fig.canvas.flush_events()
+        # fig.canvas.draw()
+        # fig.canvas.flush_events()
         num_plots += 1
         #print(num_plots/5)
 
-        time.sleep(0.001)
+        time.sleep(0.0001)
         curr_t = time.time()
         delta_t = curr_t - start 
         print("target: {:.2f}".format(target),end="\t")
@@ -124,23 +125,25 @@ def detect_touch():
             err_i = 0
         if t_mode:
             err = target-test_motor.curr_deg
-            err = soft_log(err,35,0.5)
-            err_d = err - err_p
-            err_i += err*0.5
-            err_i *= 0.9
+            # err = soft_log(err,100,0.003)
+            err_d = (err - err_p)/delta_t
+            err_i += err*delta_t/1000
+            # err_i *= 0.9
             # err_i *= 0.8
             err_p = err
             print("err:{:.2f}".format(err),end="\t")
             print("err_d:{:.2f}".format(err_d),end="\t")
             print("err_i:{:.2f}".format(err_i),end="\t")
             t_val = Kp*(err) + Kd*(err_d) + Ki*err_i;
+            t_val *= .5
+            # t_val *= 0.5
             # if t_val > 100:
             # t_val *= 0.
             print("q:{:.2f}".format(t_val))
-        if t_mode and abs(err) > 1:
+        # if t_mode and abs(err) > 1:
             test_motor.torque_control_move(int(t_val))
-        if t_mode and abs(err) < 1:
-            test_motor.torque_control_move(0)
+        # if t_mode and abs(err) < 1:
+        #     test_motor.torque_control_move(0)
         # if t_mode and test_motor.curr_i < 50:
         #     delta_angle = int(target - test_motor.curr_deg)
         #     test_motor.increment(delta_angle,speed)
