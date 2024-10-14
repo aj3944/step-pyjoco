@@ -4,12 +4,14 @@ from motor import motor,device
 import matplotlib.pyplot as plt
 import numpy as np
 from math import exp
+import traceback 
 def moving_average(a, n):
     ret = np.cumsum(a, dtype=float)
     ret[n:] = ret[n:] - ret[:-n]
     return ret[n - 1:] / n
 def soft_log(x,max_,k):
     return -max_/2+max_/(1+exp(-x*k))
+
 def detect_touch(): 
     speed = 7200
     location = 0
@@ -32,10 +34,6 @@ def detect_touch():
     test_motor.goto_single_loop(location,0,speed)
 
     time.sleep(0.01)
-    i = 0
-    pushed = False
-    pulled = False 
-    thresh = 0.1
 
     all_vals = [-33]*100 + [33]*100
     curr_deg = [-0]*100 + [0]*100
@@ -56,13 +54,13 @@ def detect_touch():
 
 
 
-    Kp = 1.75
-    Kd = 2.5
-    Ki = 0.5
+    Kp = 1.15
+    Kd = 0.1
+    Ki = 0.05
 
     err = 0
     err_p = 0
-    err_i = 0
+    err_sum = 0
 
     i_prev = 0
     i_delta = 0
@@ -99,8 +97,8 @@ def detect_touch():
         ax2.draw_artist(ax2.patch)
         ax2.draw_artist(line2)
 
-        avg = moving_average(all_vals, 10) 
-        deriv = np.gradient(avg, 1) 
+        #avg = moving_average(all_vals, 10) 
+        #deriv = np.gradient(avg, 1) 
 
 
         #print(avg)
@@ -122,11 +120,15 @@ def detect_touch():
         print("target: {:.2f}".format(target),end="\n")
 
 
-        if delta_t < 3:
+        if delta_t < 1:
             continue
         
         target = location/803
         err = target-test_motor.curr_deg
+        err = soft_log(err,60,0.075)
+        err_rate = (err_p - err) / 0.001
+        err_sum += err * 0.001
+        t_val = Kp*(err) + Kd * err_rate + Ki * err_sum
         t_val = Kp*(err)
         i_delta = (test_motor.curr_i - i_prev)
         i_prev = test_motor.curr_i
@@ -135,21 +137,26 @@ def detect_touch():
 
         print("i_to_zero",i_to_zero)
 
+        err_p = err 
+
         if not t_mode:
-            t_mode = True
             print(err)
             print(t_val)
             test_motor.torque_control_move(int(t_val))
+            t_mode = True
+                
         if t_mode:
-            print("err:{:.2f}".format(err),end="\t")            
-            if abs(err) > 5 and i_to_zero < -20:
+            print("err:{:.2f}".format(err),end="\t") 
+            if abs(t_val) > 5 and abs(test_motor.curr_i) < 75:
                 # test_motor.goto_single_loop(target,0,speed)
-                delta_angle = ((target - test_motor.curr_deg))*800
+                delta_angle = ((target - test_motor.curr_deg))*803
                 print(delta_angle)
-                test_motor.increment(delta_angle,300)
+                if abs(delta_angle) > 20:
+                    test_motor.increment(delta_angle,300)
             else:
                 t_mode = False
-
+        
+                
         # if t_mode:
         #     err = target-test_motor.curr_deg
         #     err = soft_log(err,35,0.5)
@@ -179,37 +186,9 @@ def detect_touch():
         #     location = location + int(deriv[i]) 
         #     test_motor.goto_single_loop(location,0,speed)
 
-        '''
-        if(deriv[i] >= thresh):
-            pushed = True
-            pulled = False
-            print("pushed: ", pushed) 
-        
-        elif (deriv[i] <= -(thresh) and pushed):
-            pushed = False
-            pulled = False
-            print("pushed: ", pushed) 
-
-        if (deriv[i] <= -(thresh)): 
-            pulled = True
-            pushed = False
-            print("pulled: ", pulled) 
-        
-        elif (deriv[i] >= thresh and pulled): 
-            pulled = False
-            pushed = False
-            print("pulled: ", pulled)
-        '''
-
-        i =+ 1
-        
-
-
-        
-
+        # i =+ 1
     
-
-    '''
+    ''' 
     for i in range(1000):
         test_motor.read_state3()
         #sleep(0.1)
@@ -220,13 +199,13 @@ def detect_touch():
 if __name__ == "__main__":  
     #vals = []
     #countArr = []
-    # uca = device("/dev/tty.usbserial-140")
-    uca = device("/dev/ttyUSB0")
+    uca = device("/dev/tty.usbserial-140")
+    # uca = device("/dev/ttyUSB0")
     test_motor = motor(3,uca.port())
     try:
         detect_touch()
-    except Exception as e:
-        print(e)
+    except Exception:
+        traceback.print_exc()
         test_motor.motor_disarm()
 
 
