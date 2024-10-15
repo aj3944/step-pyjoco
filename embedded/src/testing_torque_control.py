@@ -147,7 +147,7 @@ def detect_touch():
                 
         if t_mode:
             print("err:{:.2f}".format(err),end="\t") 
-            if abs(t_val) > 5 and abs(test_motor.curr_i) < 75:
+            if abs(test_motor.curr_i) < 75:
                 # test_motor.goto_single_loop(target,0,speed)
                 delta_angle = ((target - test_motor.curr_deg))*803
                 print(delta_angle)
@@ -199,8 +199,8 @@ def detect_touch():
 if __name__ == "__main__":  
     #vals = []
     #countArr = []
-    uca = device("/dev/tty.usbserial-140")
-    # uca = device("/dev/ttyUSB0")
+    # uca = device("/dev/ttsy.usbserial-140")
+    uca = device("/dev/ttyUSB0")
     test_motor = motor(3,uca.port())
     try:
         detect_touch()

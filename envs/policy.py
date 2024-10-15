@@ -24,8 +24,8 @@ def lipm_policy(time_step):
 	k += 0.001
 	t = physics.time()
 	r = time_step.reward
-	print(r)
-	print(k)
+	# print(r)
+	# print(k)
 	q = lipm_lqr.make_update(k)
 	return q 
 

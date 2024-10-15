@@ -1,0 +1,165 @@
+<mujoco model="6dof">
+
+  <include file="./common/skybox.xml"/>
+  <include file="./common/visual.xml"/>
+  <include file="./common/materials.xml"/>
+
+
+  <compiler angle="radian" meshdir="/home/va/om/step/sim/pyjoco/6_dof" autolimits="true"/>
+  <statistic meansize="0.05"/>
+  <default>
+    <default class="6dof">
+      <joint damping="1" armature="0.1"/>
+      <default class="visual">
+        <geom type="mesh" contype="0" conaffinity="0" group="2" material="black"/>
+      </default>
+      <default class="collision">
+        <geom group="3" mass="0" density="0" />
+        <default class="foot">
+          <geom type="capsule" size=".014"/>
+          <default class="foot1">
+            <geom fromto="-.035 0 -0.056 .02 0 -0.045"/>
+          </default>
+          <default class="foot2">
+            <geom fromto=".02 0 -0.045 .115 0 -0.056"/>
+          </default>
+          <default class="foot3">
+            <geom fromto=".14 -.03 -0.056 .14 .03 -0.056"/>
+          </default>
+        </default>
+      </default>
+      <site size="0.001" rgba="0.5 0.5 0.5 0.3" group="4"/>
+    </default>
+    <default class="body">
+      <geom  type="capsule" condim="1" friction=".7" solimp=".9 .99 .003" solref=".015 1" material="self"/>
+      <joint type="hinge" damping=".2" stiffness="1" armature=".01" limited="true" solimplimit="0 .99 .01"/>
+      <default class="big_joint">
+        <joint damping="5" stiffness="10"/>
+        <default class="big_stiff_joint">
+          <joint stiffness="20"/>
+        </default>
+      </default>
+      <site size=".04" group="3"/>
+      <default class="force-torque">
+        <site type="box" size=".01 .01 .02" rgba="1 0 0 1" />
+      </default>
+      <default class="touch">
+        <site type="capsule" rgba="0 0 1 .3"/>
+      </default>
+    </default>
+  </default>
+    <asset>
+        <!-- Texture for the background -->
+        <texture type="skybox" builtin="gradient" rgb1="0 0 0" rgb2="0 0 0" width="512" height="512"/>
+        <texture name="body" type="cube" builtin="flat" mark="cross" width="127" height="1278"
+                 rgb1="0.8 0.6 0.4" rgb2="0.8 0.6 0.4" markrgb="1 1 1" random="0.01"/>
+        <material name="body" texture="body" texuniform="true" rgba="0.8 0.6 .4 1"/>
+
+         <mesh name="leftthighfixedv1" file="leftthighfixedv1.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="rightshinv3" file="rightshinv3.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="footfixedv3" file="footfixedv3.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="chassisv2" file="chassisv2.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="rightthighfixedv2" file="rightthighfixedv2.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="rightshinfixedv2" file="rightshinfixedv2.stl" scale="0.001 0.001 0.001"/>
+    </asset>
+<!-- 
+    <visual>
+        <map force="0.1" zfar="30"/>
+        <rgba haze="0.15 0.25 0.35 1"/>
+      <global offwidth="2560" offheight="1440" elevation="-20" azimuth="120"/>
+    </visual> -->
+
+
+  <worldbody>
+    <light mode="targetbodycom" target="mark_4" pos="2 0 2.5"/>
+
+    <body name="mark_4">
+      <joint name="free_joint" pos="0 0 0" type="free"/>
+      <!-- <inertial pos="0 0 0" mass="0.1" diaginertia="0.0001 0.0001 0.0001"/> -->
+
+      <geom pos="0 0.05 0.3095" quat="0.707388 0.706825 0 0" type="mesh" rgba="0 0 1 1" mesh="chassisv2"/>
+      <site name="imu_site" pos="0 0.05 0.3095" />
+      <body name="intermediate_link" pos="0 0.05 0.3095" quat="0.707388 0.706825 0 0">
+        <!-- <inertial pos="0 0 0" mass="0.1" diaginertia="0.0001 0.0001 0.0001"/> -->
+        <joint name="right_hip" pos="0 0 0" axis="0 0 1" range="-0.26 0.26" damping="0.05"/>
+        <body name="right_thigh" pos="0.041 0 0">
+          <!-- <inertial pos="-0.020621 -0.116163 0.000182" quat="0.485395 0.498028 -0.502455 0.513711" mass="0.067538" diaginertia="0.000154883 0.000152057 1.26718e-05"/> -->
+          <joint name="right_thigh" pos="0 0 0" axis="1 0 0" range="-1.57 0.78" damping="0.05"/>
+          <geom type="mesh" rgba="0 1 1 1" mesh="rightthighfixedv2"/>
+          <body name="right_shin" pos="0.0025 -0.16 0">
+            <!-- <inertial pos="-0.02279 -0.05995 -7e-05" quat="0.502033 0.498188 -0.501758 0.498006" mass="0.014172" diaginertia="0.00272029 0.00246096 0.000285114"/> -->
+            <joint name="right_knee" pos="0 0 0" axis="1 0 0" range="-1.04 1.04" damping="0.05"/>
+            <geom type="mesh" rgba="1 1 0 1" mesh="rightshinfixedv2"/>
+            <body name="right_ankle" pos="-0.02 -0.13 0">
+              <!-- <inertial pos="-0.003 -0.011919 -9.8e-05" quat="0.70635 0.0327014 -0.0327014 0.70635" mass="0.022566" diaginertia="9.77159e-06 9.65458e-06 1.39971e-06"/> -->
+              <joint name="right_ankle" pos="0 0 0" axis="1 0 0" range="-0.52 0.52" damping="0.05"/>
+              <geom type="mesh" rgba="0 1 0 1" mesh="footfixedv3"/>
+            </body>
+          </body>
+        </body>
+      </body>
+      
+      <body name="intermediate_link_2" pos="0.1 0.05 0.3095" quat="0.000563312 0.000562864 0.707388 0.706825">
+        <!-- <inertial pos="0 0 0" mass="0.1" diaginertia="0.0001 0.0001 0.0001"/> -->
+        <joint name="left_hip" pos="0 0 0" axis="0 0 1" range="-0.26 0.26" damping="0.05"/>
+        <body name="left_thigh">
+          <!-- <inertial pos="-0.020539 -0.11748 -0.000178" quat="0.500887 0.512722 -0.486405 0.499639" mass="0.067626" diaginertia="0.000159543 0.000156167 1.33237e-05"/> -->
+          <joint name="left_thigh" pos="0 0 0" axis="1 0 0" range="-0.78 1.57" damping="0.05"/>
+          <geom type="mesh" rgba="0 1 1 1" mesh="leftthighfixedv1"/>
+          <body name="left_shin" pos="-0.0425 -0.16 0" quat="0.000796327 0 1 0">
+            <!-- <inertial pos="-0.02279 -0.05995 -7e-05" quat="0.502033 0.498188 -0.501758 0.498006" mass="0.014172" diaginertia="0.00272029 0.00246096 0.000285114"/> -->
+            <joint name="left_knee" pos="0 0 0" axis="1 0 0" range="-1.04 1.04" damping="0.05"/>
+            <geom type="mesh" rgba="1 1 0 1" mesh="rightshinv3"/>
+            <body name="left_ankle" pos="-0.02 -0.13 0">
+              <!-- <inertial pos="-0.003 -0.011919 -9.8e-05" quat="0.70635 0.0327014 -0.0327014 0.70635" mass="0.022566" diaginertia="9.77159e-06 9.65458e-06 1.39971e-06"/> -->
+              <joint name="left_ankle" pos="0 0 0" axis="1 0 0" range="-0.52 0.52" damping="0.05"/>
+              <geom type="mesh" rgba="0 1 0 1" mesh="footfixedv3"/>
+            </body>
+          </body>
+        </body>
+      </body>
+
+    </body>
+    
+     <!-- Camera definitions -->
+      <camera name="back" pos="-3 0 1" xyaxes="0 -1 0 1 0 2" mode="trackcom"/>
+      <camera name="side" pos="0 -3 1" xyaxes="1 0 0 0 1 2" mode="trackcom"/>
+      <body name="head" pos="0 0 .19">
+        <camera name="egocentric" pos=".09 0 0" xyaxes="0 -1 0 .1 0 1" fovy="80"/>
+      </body>
+      
+  </worldbody>
+
+  
+  <actuator>
+    <position ctrllimited="true" ctrlrange="-10 10" gear="1" joint="left_thigh"/>
+  </actuator>
+  <actuator>
+    <position ctrllimited="true" ctrlrange="-10 10" gear="1" joint="left_knee"/>
+  </actuator>
+  <actuator>
+    <position ctrllimited="true" ctrlrange="-10 10" gear="1" joint="left_ankle"/>
+  </actuator>
+  <actuator>
+    <position ctrllimited="true" ctrlrange="-10 10" gear="1" joint="right_thigh"/>
+  </actuator>
+  <actuator>
+    <position ctrllimited="true" ctrlrange="-10 10" gear="1" joint="right_knee"/>
+  </actuator>
+  <actuator>
+    <position ctrllimited="true" ctrlrange="-10 10" gear="1" joint="right_ankle"/>
+  </actuator>
+  <actuator>
+    <position ctrllimited="true" ctrlrange="-10 10" gear="1" joint="left_hip"/>
+  </actuator>
+  <actuator>
+    <position ctrllimited="true" ctrlrange="-10 10" gear="1" joint="right_hip"/>
+  </actuator>
+
+
+  <sensor>
+    <accelerometer name="imu_accel" site="imu_site"/>
+    <gyro name="imu_gyro" site="imu_site"/>
+  </sensor>
+
+</mujoco>
