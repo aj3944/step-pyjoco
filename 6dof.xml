@@ -16,7 +16,7 @@
       <default class="collision">
         <geom group="3" mass="0" density="0" />
         <default class="foot">
-          <geom type="capsule" size=".014"/>
+          <geom type="capsule" size=".114"/>
           <default class="foot1">
             <geom fromto="-.035 0 -0.056 .02 0 -0.045"/>
           </default>
@@ -49,6 +49,8 @@
     </default>
   </default>
     <asset>
+    <material name="black" rgba="0.1 0.1 0.1 1"/>
+    <material name="white" rgba="1 1 1 1"/>      
         <!-- Texture for the background -->
         <texture type="skybox" builtin="gradient" rgb1="0 0 0" rgb2="0 0 0" width="512" height="512"/>
         <texture name="body" type="cube" builtin="flat" mark="cross" width="127" height="1278"
@@ -58,7 +60,7 @@
          <mesh name="leftthighfixedv1" file="leftthighfixedv1.stl" scale="0.001 0.001 0.001"/>
         <mesh name="rightshinv3" file="rightshinv3.stl" scale="0.001 0.001 0.001"/>
         <mesh name="footfixedv3" file="footfixedv3.stl" scale="0.001 0.001 0.001"/>
-        <mesh name="chassisv2" file="chassisv2.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="chassisv2" file="chassisv2.stl" scale="0.001 0.001 0.001" />
         <mesh name="rightthighfixedv2" file="rightthighfixedv2.stl" scale="0.001 0.001 0.001"/>
         <mesh name="rightshinfixedv2" file="rightshinfixedv2.stl" scale="0.001 0.001 0.001"/>
     </asset>
@@ -75,49 +77,35 @@
 
     <body name="mark_4">
       <joint name="free_joint" pos="0 0 0" type="free"/>
-      <!-- <inertial pos="0 0 0" mass="0.1" diaginertia="0.0001 0.0001 0.0001"/> -->
+      <geom pos="0 0.05 0.3095"  type="mesh" rgba="0 0 1 1" mesh="chassisv2" quat="0.707388 0.706825 0 0"/>
+      <site name="imu_site" pos="0 -0.1 0.3095" />
+      <body name="left_hip" pos=" 0 0 0 ">
+        <joint name="left_hip" pos="0 0.01 0.3095" axis="1 0 0"/>
+        <geom  class="collision" mesh="leftthighfixedv1"  pos="0.04 0.01 0.3095" quat="0.707388 0.706825 0 0" />
+        <geom class="visual" mesh="leftthighfixedv1"   pos="0.04 0.01 0.3095" quat="0.707388 0.706825 0 0"/>
+        <body name="left_knee" pos=" 0 0 0 ">
+          <joint name="left_knee"  pos="0.045 0.01 0.1495" axis="1 0 0"/>
+          <geom  class="collision" mesh="rightshinfixedv2"  pos="0.045 0.01 0.1495" quat="0.707388 0.706825 0 0" />
+          <geom class="visual" mesh="rightshinfixedv2"   pos="0.045 0.01 0.1495" quat="0.707388 0.706825 0 0"/>
+        </body>
 
-      <geom pos="0 0.05 0.3095" quat="0.707388 0.706825 0 0" type="mesh" rgba="0 0 1 1" mesh="chassisv2"/>
-      <site name="imu_site" pos="0 0.05 0.3095" />
-      <body name="intermediate_link" pos="0 0.05 0.3095" quat="0.707388 0.706825 0 0">
-        <!-- <inertial pos="0 0 0" mass="0.1" diaginertia="0.0001 0.0001 0.0001"/> -->
-        <joint name="right_hip" pos="0 0 0" axis="0 0 1" range="-0.26 0.26" damping="0.05"/>
+      </body>
+      <!-- <joint name="right_hip" pos="0 0 0" axis="0 0 1" range="-0.26 0.26" damping="0.05"/>
         <body name="right_thigh" pos="0.041 0 0">
-          <!-- <inertial pos="-0.020621 -0.116163 0.000182" quat="0.485395 0.498028 -0.502455 0.513711" mass="0.067538" diaginertia="0.000154883 0.000152057 1.26718e-05"/> -->
           <joint name="right_thigh" pos="0 0 0" axis="1 0 0" range="-1.57 0.78" damping="0.05"/>
           <geom type="mesh" rgba="0 1 1 1" mesh="rightthighfixedv2"/>
           <body name="right_shin" pos="0.0025 -0.16 0">
-            <!-- <inertial pos="-0.02279 -0.05995 -7e-05" quat="0.502033 0.498188 -0.501758 0.498006" mass="0.014172" diaginertia="0.00272029 0.00246096 0.000285114"/> -->
             <joint name="right_knee" pos="0 0 0" axis="1 0 0" range="-1.04 1.04" damping="0.05"/>
             <geom type="mesh" rgba="1 1 0 1" mesh="rightshinfixedv2"/>
             <body name="right_ankle" pos="-0.02 -0.13 0">
-              <!-- <inertial pos="-0.003 -0.011919 -9.8e-05" quat="0.70635 0.0327014 -0.0327014 0.70635" mass="0.022566" diaginertia="9.77159e-06 9.65458e-06 1.39971e-06"/> -->
               <joint name="right_ankle" pos="0 0 0" axis="1 0 0" range="-0.52 0.52" damping="0.05"/>
               <geom type="mesh" rgba="0 1 0 1" mesh="footfixedv3"/>
             </body>
           </body>
-        </body>
-      </body>
+        </body> -->
+
       
-      <body name="intermediate_link_2" pos="0.1 0.05 0.3095" quat="0.000563312 0.000562864 0.707388 0.706825">
-        <!-- <inertial pos="0 0 0" mass="0.1" diaginertia="0.0001 0.0001 0.0001"/> -->
-        <joint name="left_hip" pos="0 0 0" axis="0 0 1" range="-0.26 0.26" damping="0.05"/>
-        <body name="left_thigh">
-          <!-- <inertial pos="-0.020539 -0.11748 -0.000178" quat="0.500887 0.512722 -0.486405 0.499639" mass="0.067626" diaginertia="0.000159543 0.000156167 1.33237e-05"/> -->
-          <joint name="left_thigh" pos="0 0 0" axis="1 0 0" range="-0.78 1.57" damping="0.05"/>
-          <geom type="mesh" rgba="0 1 1 1" mesh="leftthighfixedv1"/>
-          <body name="left_shin" pos="-0.0425 -0.16 0" quat="0.000796327 0 1 0">
-            <!-- <inertial pos="-0.02279 -0.05995 -7e-05" quat="0.502033 0.498188 -0.501758 0.498006" mass="0.014172" diaginertia="0.00272029 0.00246096 0.000285114"/> -->
-            <joint name="left_knee" pos="0 0 0" axis="1 0 0" range="-1.04 1.04" damping="0.05"/>
-            <geom type="mesh" rgba="1 1 0 1" mesh="rightshinv3"/>
-            <body name="left_ankle" pos="-0.02 -0.13 0">
-              <!-- <inertial pos="-0.003 -0.011919 -9.8e-05" quat="0.70635 0.0327014 -0.0327014 0.70635" mass="0.022566" diaginertia="9.77159e-06 9.65458e-06 1.39971e-06"/> -->
-              <joint name="left_ankle" pos="0 0 0" axis="1 0 0" range="-0.52 0.52" damping="0.05"/>
-              <geom type="mesh" rgba="0 1 0 1" mesh="footfixedv3"/>
-            </body>
-          </body>
-        </body>
-      </body>
+
 
     </body>
     
@@ -132,9 +120,9 @@
 
   
   <actuator>
-    <position ctrllimited="true" ctrlrange="-10 10" gear="1" joint="left_thigh"/>
+    <position ctrllimited="true" ctrlrange="-10 10" gear="1" joint="left_hip"/>
   </actuator>
-  <actuator>
+<!--   <actuator>
     <position ctrllimited="true" ctrlrange="-10 10" gear="1" joint="left_knee"/>
   </actuator>
   <actuator>
@@ -154,7 +142,7 @@
   </actuator>
   <actuator>
     <position ctrllimited="true" ctrlrange="-10 10" gear="1" joint="right_hip"/>
-  </actuator>
+  </actuator> -->
 
 
   <sensor>

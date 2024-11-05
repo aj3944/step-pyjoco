@@ -51,7 +51,7 @@ class Controller():
 		if d:
 			print(d.time)
 
-			if d.time < 1:
+			if d.time < 10:
 				return 0
 			t = d.time
 		t_hat = t/3;
