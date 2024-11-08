@@ -4,7 +4,7 @@
   <include file="./common/materials.xml"/>
 
 
-  <compiler angle="radian" meshdir="/home/va/om/step/sim/pyjoco/assets" autolimits="true"/>
+  <compiler angle="radian" meshdir="/home/va/om/step/sim/pyjoco/6_dof_ktech" autolimits="true"/>
 
 
   <statistic meansize="0.05"/>
@@ -54,14 +54,13 @@
     <material name="white" rgba="1 1 1 1"/>
     <mesh scale="0.001 0.001 0.001" file="pelvis.stl"/>
     <mesh scale="0.001 0.001 0.001" file="step_bot_left_ankle_link.stl"/>
-    <mesh scale="0.001 0.001 0.001" file="step_bot_left_hip_pitch_link.stl"/>
-    <mesh scale="0.001 0.001 0.001" file="step_bot_left_hip_yaw_link.stl"/>
-    <mesh scale="0.001 0.001 0.001" file="step_bot_left_knee_link.stl"/>
+    <mesh scale="0.001 0.001 0.001" file="step_bot_left_knee_pitch_link.stl"/>
+    <mesh scale="0.001 0.001 0.001" file="step_bot_left_hip_roll_link.stl"/>
+    <mesh scale="0.001 0.001 0.001" file="step_bot_left_shin_link.stl"/>
     <mesh scale="0.001 0.001 0.001" file="step_bot_right_ankle_link.stl"/>
-    <mesh scale="0.001 0.001 0.001" file="step_bot_right_hip_pitch_link.stl"/>
-    <mesh scale="0.001 0.001 0.001" file="step_bot_right_hip_yaw_link.stl"/>
-    <mesh scale="0.001 0.001 0.001" file="step_bot_right_knee_link.stl"/>
-
+    <mesh scale="0.001 0.001 0.001" file="step_bot_right_knee_pitch_link.stl"/>
+    <mesh scale="0.001 0.001 0.001" file="step_bot_right_hip_roll_link.stl"/>
+    <mesh scale="0.001 0.001 0.001" file="step_bot_right_shin_link.stl"/>
 
   </asset>
   <worldbody>
@@ -84,25 +83,25 @@
 
       <geom type="mesh"  mesh="pelvis" class="collision" mass="5.39"/>
       <geom class="visual" mesh="pelvis"/>
-      <body name="step_bot_left_hip_yaw_link" pos="0 0.0 -0.0">
+      <body name="step_bot_left_hip_roll_link" pos="0 0.0 -0.0">
         <!-- <inertial pos="0 0 0" quat="0.69699 0.219193 0.233287 0.641667" mass="0.544" diaginertia="0.00304494 0.00296885 0.00189201"/> -->
         <joint name="left_hip_yaw" pos="0 .1 0 " axis="1 0 1" range="-0.43 0.43"/>
-        <geom class="collision" mesh="step_bot_left_hip_yaw_link"/>
-        <geom class="visual" mesh="step_bot_left_hip_yaw_link"/>
+        <geom class="collision" mesh="step_bot_left_hip_roll_link"/>
+        <geom class="visual" mesh="step_bot_left_hip_roll_link"/>
         <!-- <geom size="0.06 0.035" pos="-0.0 0 0" quat="0.707123 0 0.70709 0" type="cylinder" class="collision"/> -->
-        <body name="step_bot_left_hip_pitch_link" pos="0 0.0 -0.0">
+        <body name="step_bot_left_knee_pitch_link" pos="0 0.0 -0.0">
           <!-- <inertial pos="-0.04923 0.0001 0.0072" quat="0.69699 0.219193 0.233287 0.641667" mass="2.244" diaginertia="0.00304494 0.00296885 0.00189201"/> -->
           <joint name="left_hip_pitch" pos="0 .1 -.12 " axis="0 1 0" range="-1.43 1.43"/>
-          <!-- <geom type="mesh"  mesh="step_bot_left_hip_yaw_link" /> -->
-          <geom class="collision" mesh="step_bot_left_hip_pitch_link"/>
-          <geom name="knee" class="visual" mesh="step_bot_left_hip_pitch_link"/>
+          <!-- <geom type="mesh"  mesh="step_bot_left_hip_roll_link" /> -->
+          <geom class="collision" mesh="step_bot_left_knee_pitch_link"/>
+          <geom name="knee" class="visual" mesh="step_bot_left_knee_pitch_link"/>
           <!-- <geom size="0.06 0.135" pos="-0.0 0 0" quat="0.707123 0 0.70709 0" type="cylinder" class="collision"/> -->
 
-          <body name="step_bot_left_knee_link" pos="0 0.0 -0.0">
+          <body name="step_bot_left_shin_link" pos="0 0.0 -0.0">
             <!-- <inertial pos="-0.04923 0.0001 0.0072" quat="0.69699 0.219193 0.233287 0.641667" mass="2.244" diaginertia="0.00304494 0.00296885 0.00189201"/> -->
             <joint name="left_knee_pitch" pos="0 .1 -.25 " axis="0 1 0" range="-1.43 1.43"/>
-            <geom class="collision" mesh="step_bot_left_knee_link"/>
-            <geom class="visual" mesh="step_bot_left_knee_link"/>
+            <geom class="collision" mesh="step_bot_left_shin_link"/>
+            <geom class="visual" mesh="step_bot_left_shin_link"/>
             <!-- <geom size="0.06 0.035" pos="-0.0 0 0" quat="0.707123 0 0.70709 0" type="cylinder" class="collision"/> -->
             <body name="step_bot_left_ankle_link" pos="0 0.0 -0.0">
               <!-- <inertial pos="-0.04923 0.0001 0.0072" quat="0.69699 0.219193 0.233287 0.641667" mass="2.244" diaginertia="0.00304494 0.00296885 0.00189201"/> -->
@@ -120,23 +119,23 @@
           </body>
         </body>
       </body>
-      <body name="step_bot_right_hip_yaw_link" pos="0 0.0 -0.0">
+      <body name="step_bot_right_hip_roll_link" pos="0 0.0 -0.0">
         <!-- <inertial pos="-0.04923 0.0001 0.0072" quat="0.69699 0.219193 0.233287 0.641667" mass="2.244" diaginertia="0.00304494 0.00296885 0.00189201"/> -->
         <joint name="right_hip_yaw" pos="0 -.1 0 " axis="1 0 1" range="-0.43 0.43"/>
-        <geom class="collision" mesh="step_bot_right_hip_yaw_link"/>
-        <geom class="visual" mesh="step_bot_right_hip_yaw_link"/>
+        <geom class="collision" mesh="step_bot_right_hip_roll_link"/>
+        <geom class="visual" mesh="step_bot_right_hip_roll_link"/>
         <!-- <geom size="0.06 0.035" pos="-0.0 0 0" quat="0.707123 0 0.70709 0" type="cylinder" class="collision"/> -->
-         <body name="step_bot_right_hip_pitch_link" pos="0 0.0 -0.0">
+         <body name="step_bot_right_knee_pitch_link" pos="0 0.0 -0.0">
             <!-- <inertial pos="-0.04923 0.0001 0.0072" quat="0.69699 0.219193 0.233287 0.641667" mass="2.244"     diaginertia="0.00304494 0.00296885 0.00189201"/> -->
             <joint name="right_hip_pitch" pos="0 -.1 -0.12 " axis="0 1 0" range="-1.43 1.43"/>
-            <geom class="collision" mesh="step_bot_right_hip_pitch_link"/>
-            <geom class="visual" mesh="step_bot_right_hip_pitch_link"/>
+            <geom class="collision" mesh="step_bot_right_knee_pitch_link"/>
+            <geom class="visual" mesh="step_bot_right_knee_pitch_link"/>
             <!-- <geom size="0.06 0.035" pos="-0.0 0 0" quat="0.707123 0 0.70709 0" type="cylinder" class="collision"/> -->
-           <body name="step_bot_right_knee_link" pos="0 0.0 -0.0">
+           <body name="step_bot_right_shin_link" pos="0 0.0 -0.0">
               <!-- <inertial pos="-0.04923 0.0001 0.0072" quat="0.69699 0.219193 0.233287 0.641667" mass="2.244"     diaginertia="0.00304494 0.00296885 0.00189201"/> -->
               <joint name="right_knee_pitch" pos="0 -.1 -0.25 " axis="0 1 0" range="-1.43 1.43"/>
-              <geom class="collision" mesh="step_bot_right_knee_link"/>
-              <geom class="visual" mesh="step_bot_right_knee_link"/>
+              <geom class="collision" mesh="step_bot_right_shin_link"/>
+              <geom class="visual" mesh="step_bot_right_shin_link"/>
               <!-- <geom size="0.06 0.035" pos="-0.0 0 0" quat="0.707123 0 0.70709 0" type="cylinder" class="collision"/> -->
               <body name="step_bot_right_ankle_link" pos="0 0.0 -0.0">
                   <!-- <inertial pos="-0.04923 0.0001 0.0072" quat="0.69699 0.219193 0.233287 0.641667" mass="2.244"     diaginertia="0.00304494 0.00296885 0.00189201"/> -->
