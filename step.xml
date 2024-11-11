@@ -22,33 +22,33 @@
   <asset>
     <material name="black" rgba="0.1 0.1 0.1 1"/>
     <material name="white" rgba="1 1 1 1"/>
-    <mesh scale="0.001 0.001 0.001" file="pelvis.stl"/>
-    <mesh scale="0.001 0.001 0.001" file="step_bot_left_ankle_link.stl"/>
-    <mesh scale="0.001 0.001 0.001" file="step_bot_left_knee_pitch_link.stl"/>
-    <mesh scale="0.001 0.001 0.001" file="step_bot_left_hip_roll_link.stl"/>
-    <mesh scale="0.001 0.001 0.001" file="step_bot_left_shin_link.stl"/>
-    <mesh scale="0.001 0.001 0.001" file="step_bot_right_ankle_link.stl"/>
+    <mesh scale="0.001 0.001 0.001" file="link0.stl"/>
+    <mesh scale="0.001 0.001 0.001" file="link1.stl"/>
+    <mesh scale="0.001 0.001 0.001" file="link2.stl"/>
+    <mesh scale="0.001 0.001 0.001" file="link3.stl"/>
+    <mesh scale="0.001 0.001 0.001" file="link4.stl"/>
+<!--     <mesh scale="0.001 0.001 0.001" file="step_bot_right_ankle_link.stl"/>
     <mesh scale="0.001 0.001 0.001" file="step_bot_right_knee_pitch_link.stl"/>
     <mesh scale="0.001 0.001 0.001" file="step_bot_right_hip_roll_link.stl"/>
-    <mesh scale="0.001 0.001 0.001" file="step_bot_right_shin_link.stl"/>
+    <mesh scale="0.001 0.001 0.001" file="step_bot_right_shin_link.stl"/> -->
 
   </asset>
   <worldbody>
     <light mode="targetbodycom" target="base" pos="2 0 2.5"/>
     <body name="base" pos="0 0 0.66" childclass="step6" >
       <freejoint/>
-      <geom type="mesh"  mesh="pelvis" class="collision" mass="5.39"/>
-      <geom class="visual" mesh="pelvis"/>
+      <geom type="mesh"  mesh="link0" class="collision" mass="5.39"/>
+      <geom class="visual" mesh="link0"/>
       <body>
         <body>
         <joint name="left_hip_roll" pos="-0.09 0 0 " axis="0 1 0" range="-0.43 0.43"/>
-        <geom  pos="-0.09 0 0.0" type="mesh"  mesh="step_bot_left_hip_roll_link" class="collision" />
-        <geom  pos="-0.09 0 0.0" class="visual" mesh="step_bot_left_hip_roll_link"   />
+        <geom  pos="-0.09 0 0.0" type="mesh"  mesh="link1" class="collision" />
+        <geom  pos="-0.09 0 0.0" class="visual" mesh="link1"   />
         </body>
         <body>
         <joint name="right_hip_roll" pos="0.09 0 0 " axis="0 1 0" range="-0.43 0.43"/>
-        <geom  pos="-0.065 0.1 -0.15" type="mesh"  mesh="step_bot_right_hip_roll_link" class="collision"  />
-        <geom  pos="-0.065 0.1 -0.15" class="visual" mesh="step_bot_right_hip_roll_link"/>
+        <geom  pos="-0.065 0.1 -0.15" type="mesh"  mesh="link2" class="collision"  />
+        <geom  pos="-0.065 0.1 -0.15" class="visual" mesh="link2"/>
         </body>
       </body>
     </body>
