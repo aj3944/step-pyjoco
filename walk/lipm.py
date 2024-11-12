@@ -51,7 +51,7 @@ class Controller():
 		if d:
 			print(d.time)
 
-			if d.time < 10:
+			if d.time < 0:
 				return 0
 			t = d.time
 		t_hat = t/3;
@@ -93,23 +93,32 @@ class Controller():
 		# self.right_anke_roll_ctrl = -0.2*sin(t_hat*0.5)**10;
 		# self.right_anke_roll_ctrl = 0.05*cos(t_hat)*2;
 
-		self.controls[lhy] = self.left_hip_yaw_ctrl; 
-		self.controls[lhp] = -2*self.left_hip_pitch_ctrl + march_l;
-		self.controls[lkp] = self.left_hip_pitch_ctrl + self.left_knee_pitch_ctrl - 2*march_l;
-		self.controls[lar] = self.left_anke_roll_ctrl + flex_l;
-		self.controls[rhy] = self.right_hip_yaw_ctrl; 
-		self.controls[rhp] = -2*self.right_hip_pitch_ctrl + march_r;
-		self.controls[rkp] = self.right_hip_pitch_ctrl + self.right_knee_pitch_ctrl - 2*march_r;
-		self.controls[rar] = self.right_anke_roll_ctrl + flex_r;
+		# self.controls[lhy] = self.left_hip_yaw_ctrl; 
+		# self.controls[lhp] = -2*self.left_hip_pitch_ctrl + march_l;
+		# self.controls[lkp] = self.left_hip_pitch_ctrl + self.left_knee_pitch_ctrl - 2*march_l;
+		# self.controls[lar] = self.left_anke_roll_ctrl + flex_l;
+		# self.controls[rhy] = self.right_hip_yaw_ctrl; 
+		# self.controls[rhp] = -2*self.right_hip_pitch_ctrl + march_r;
+		# self.controls[rkp] = self.right_hip_pitch_ctrl + self.right_knee_pitch_ctrl - 2*march_r;
+		# self.controls[rar] = self.right_anke_roll_ctrl + flex_r;
+
+		# self.controls[lhy] = 0;
+		self.controls[lhp] = self.left_hip_yaw_ctrl;
+		# self.controls[lkp] = 0.2;
+		# # self.controls[lar] = 0.2;
+		# self.controls[rhy] = 0;
+		self.controls[rhp] = self.left_hip_yaw_ctrl;
+		# self.controls[rkp] = 0.2;
+		# self.controls[rar] = 0.2;
 
 		if d:
-			d.ctrl[lhy] = self.left_hip_yaw_ctrl; 
-			d.ctrl[lhp] = -2*self.left_hip_pitch_ctrl + march_l;
-			d.ctrl[lkp] = self.left_hip_pitch_ctrl + self.left_knee_pitch_ctrl - 2*march_l;
-			d.ctrl[lar] = self.left_anke_roll_ctrl + flex_l;
-			d.ctrl[rhy] = self.right_hip_yaw_ctrl; 
-			d.ctrl[rhp] = -2*self.right_hip_pitch_ctrl + march_r;
-			d.ctrl[rkp] = self.right_hip_pitch_ctrl + self.right_knee_pitch_ctrl - 2*march_r;
-			d.ctrl[rar] = self.right_anke_roll_ctrl + flex_r;
+			d.ctrl[lhy] = self.controls[lhy]
+			d.ctrl[lhp] = self.controls[lhp]
+			d.ctrl[lkp] = self.controls[lkp]
+			d.ctrl[lar] = self.controls[lar]
+			d.ctrl[rhy] = self.controls[rhy]
+			d.ctrl[rhp] = self.controls[rhp]
+			d.ctrl[rkp] = self.controls[rkp]
+			d.ctrl[rar] = self.controls[rar]
 
 		return self.controls
