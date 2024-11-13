@@ -80,8 +80,8 @@ class Controller():
 		# self.right_hip_pitch_ctrl = 0.5;
 
 
-		self.left_hip_yaw_ctrl = 0.18*sin(self.step);
-		self.right_hip_yaw_ctrl = 0.18*sin(self.step);
+		self.left_hip_yaw_ctrl = -1*sin(self.step*10);
+		self.right_hip_yaw_ctrl = 1*sin(self.step*10);
 
 
 
@@ -102,7 +102,7 @@ class Controller():
 		# self.controls[rkp] = self.right_hip_pitch_ctrl + self.right_knee_pitch_ctrl - 2*march_r;
 		# self.controls[rar] = self.right_anke_roll_ctrl + flex_r;
 
-		# self.controls[lhy] = 0;
+		# self.controls[lhy] = 1;s
 		self.controls[lhp] = self.left_hip_yaw_ctrl;
 		# self.controls[lkp] = 0.2;
 		# # self.controls[lar] = 0.2;

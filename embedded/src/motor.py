@@ -97,11 +97,12 @@ class motor():
 	curr_i = 0
 	cf_factor = 1.251281695;
 
-	def __init__(self, id_, uca):
+	def __init__(self, id_, uca, HOME):
 		self.motor_id = id_
 		self.curr_pos = 0
 		self.goal_pos = 0
 		self.device = uca
+		self.HOME = HOME
 	def motor_arm(self):
 		self.armed = True
 		self.device.write(motor_on(self.motor_id))
@@ -136,6 +137,12 @@ class motor():
 	def increment(self,angle,speed):
 		self.device.write(increment_angle_speed(self.motor_id,int(angle),speed))
 	def goto_single_loop(self,angle,direction,speed):
+		self.device.write(single_loop_angle_speed_control(self.motor_id,angle,direction,speed))
+	def goto_single_loop(self,angle,direction,speed):
+		direction = -1
+
+
+
 		self.device.write(single_loop_angle_speed_control(self.motor_id,angle,direction,speed))
 	def read(self):
 		self.device.write(read_encoder(self.motor_id))

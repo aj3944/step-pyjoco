@@ -2,7 +2,8 @@
   <include file="./common/skybox.xml"/>
   <include file="./common/visual.xml"/>
   <include file="./common/materials.xml"/>
-
+  <!-- <option > -->
+  <option timestep="0.002" gravity="0 0 0"/>
 
   <compiler angle="radian" meshdir="/home/va/om/step/sim/pyjoco/6_dof_ktech" autolimits="true"/>
 
@@ -22,7 +23,7 @@
   <asset>
     <material name="black" rgba="0.1 0.1 0.1 1"/>
     <material name="white" rgba="1 1 1 1"/>
-    <mesh scale="0.001 0.001 0.001" file="link0.stl"/>
+    <mesh scale="0.001 0.001 0.001" file="link00.stl"/>
     <mesh scale="0.001 0.001 0.001" file="link1.stl"/>
     <mesh scale="0.001 0.001 0.001" file="link2.stl"/>
     <mesh scale="0.001 0.001 0.001" file="link3.stl"/>
@@ -41,8 +42,8 @@
     <light mode="targetbodycom" target="base" pos="2 0 2.5"/>
     <body name="base" pos="0 0 0.66" childclass="step6" >
       <freejoint/>
-      <geom type="mesh"  mesh="link0" class="collision" euler="1.57079 0 0"/>
-      <geom type="mesh"   class="visual" mesh="link0"  euler="1.57079 0 0"/>
+      <geom type="mesh"  mesh="link00" class="collision" euler="0 0 1.57079"/>
+      <geom type="mesh"   class="visual" mesh="link00"  euler="0 0 1.57079"/>
       <body>
         <body>
         <joint name="left_hip_roll" pos="-0.09 0 0 " axis="0 1 0" range="-0.05 0.05"/>
