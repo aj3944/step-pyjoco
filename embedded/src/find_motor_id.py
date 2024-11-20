@@ -1,4 +1,4 @@
-import cv2 as cv
+# import cv2 as cv
 from motor import motor, device
 import time
 import serial

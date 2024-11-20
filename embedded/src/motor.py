@@ -96,13 +96,19 @@ class motor():
 	curr_encod1 = 0
 	curr_i = 0
 	cf_factor = 1.251281695;
+	minDeg = 180
+	maxDeg = 180
+	homeDeg = 180
 
-	def __init__(self, id_, uca, HOME):
+	def __init__(self, id_, uca, HOME, MINVAL, MAXVAL):
 		self.motor_id = id_
 		self.curr_pos = 0
 		self.goal_pos = 0
 		self.device = uca
 		self.HOME = HOME
+		self.homeDeg = HOME
+		self.minDeg = MINVAL
+		self.maxDeg = MAXVAL
 	def motor_arm(self):
 		self.armed = True
 		self.device.write(motor_on(self.motor_id))
@@ -138,18 +144,20 @@ class motor():
 		self.device.write(increment_angle_speed(self.motor_id,int(angle),speed))
 	def goto_single_loop(self,angle,direction,speed):
 		self.device.write(single_loop_angle_speed_control(self.motor_id,angle,direction,speed))
-	def goto_single_loop_shortest(self,angle,speed):
-		direction = -1
-		delta = angle - self.curr_deg
-		if delta < 0:
+	def goto_single_loop_shortest(self,rawAngle,speed):
+		if rawAngle < self.minDeg or rawAngle > self.maxDeg: 
+			print("invalid angle value")
+			self.motor_disarm()
+			return
+		self.read_single_loop()
+		delta = int(self.curr_deg) - rawAngle
+		location = rawAngle * 803
+		if delta>0:
 			direction = 1
 		else:
 			direction = 0
-		print(angle)
-		print(self.curr_deg)
-		print(direction)
-		angle = int(100*angle)
-		self.device.write(single_loop_angle_speed_control(self.motor_id,angle,direction,speed))
+    
+		self.device.write(single_loop_angle_speed_control(self.motor_id,location,direction,speed))
 	def read(self):
 		self.device.write(read_encoder(self.motor_id))
 		time.sleep(0.001)
