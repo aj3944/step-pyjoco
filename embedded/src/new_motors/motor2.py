@@ -25,3 +25,7 @@ class motor():
 
 	def motor_stop(self):
 		self.device.write(motor_stop(self.motor_id))
+
+	def read_mode(self):
+		self.device.write(sys_op_mode(self.motor_id))
+		
