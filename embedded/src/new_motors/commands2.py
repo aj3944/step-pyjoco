@@ -117,3 +117,16 @@ def sys_op_mode(motor_id = 1):
 	# eof 
 	frame.append(0x55)	
 	return bytes(frame)
+
+#2.25 Motor Power Acquisition
+def motor_power_acq(motor_id=1):
+	frame = bytearray()
+	frame.append(0xaa) #header
+	frame.append(0xc8) #header
+	frame.append(0x40 + motor_id) #id
+	frame.append(0x01) #id
+	frame.append(0x71) #command name
+	for i in range(7): #datapacket gets all the data[1]-[7]
+		frame.append(0x00)
+	frame.append(0x55) #end of frame
+	return bytes(frame)
