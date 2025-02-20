@@ -148,6 +148,23 @@ def motor_read_single_turn_encoder_parse(frame):
 	zeroOffset = int.from_bytes(frame[dataStartIndex + 6: dataStartIndex + 8], byteorder='little', signed=False)
 	return (position, origPosition, zeroOffset)
 
+#2.13 read single-turn angle
+def send_data_field_definition(motor_id=1):
+    frame = bytearray()
+	#header
+    frame.append(0xaa)
+    frame.append(0xc8)
+	#id
+    frame.append(0x40 + motor_id)
+    frame.append(0x01)
+	#command_name
+    frame.append(0x94)
+	#data_packet
+    [frame.append(0X00 for i in range(7))]
+    frame.append(0x55)
+	#eof
+    return bytes(frame)
+
 
 # 2.18 Motor stop command
 def motor_stop(motor_id = 1):
@@ -215,3 +232,4 @@ def motor_power_acq(motor_id=1):
 		frame.append(0x00)
 	frame.append(0x55) #end of frame
 	return bytes(frame)
+
