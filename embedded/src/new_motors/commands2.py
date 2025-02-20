@@ -1,6 +1,6 @@
 # 2.1 send data: Create request frame for the Read PID parameter command
 # returns a frame that requests the parameters of current, speed, position loop KP and KI
-def motor_read_pid_command(motor_id = 1):
+def read_pid(motor_id = 1):
 	frame = bytearray()
 	# header 
 	frame.append(0xaa)
@@ -16,10 +16,10 @@ def motor_read_pid_command(motor_id = 1):
 	frame.append(0x55)
 	return bytes(frame)
 
-# 2.1 read data: Parse returned frame for the Read PID parameter command
+# 2.1 parse data: Parse returned frame for the Read PID parameter command
 # returns a tuple: (CurrKP, CurrKI, SpdKP, SpdKI, PosKP, PosKI)
-def motor_read_pid_parse(frame):
-	dataStartIndex = 0
+def parse_pid_data(frame):
+	dataStartIndex = frame.index(0x30)
 	CurrKP = int.from_bytes(frame[dataStartIndex + 2], byteorder='little', signed=False)
 	CurrKI = int.from_bytes(frame[dataStartIndex + 3], byteorder='little', signed=False)
 	SpdKP = int.from_bytes(frame[dataStartIndex + 4], byteorder='little', signed=False)
@@ -33,7 +33,7 @@ def motor_read_pid_parse(frame):
 # 2.3 Write PID parameters to ROM command
 # write the parameters of current, speed, position loop KP and KI to RAM
 # stay in 8 bit range, 0-255
-def motor_write_pid_rom(motor_id = 1, CurrKP = 0x00, CurrKI = 0x00, SpdKP = 0x00, 
+def write_pid_rom(motor_id = 1, CurrKP = 0x00, CurrKI = 0x00, SpdKP = 0x00, 
 						SpdKI = 0x00, PosKP = 0x00, PosKI = 0x00):
 	frame = bytearray()
 	# header 
@@ -58,7 +58,7 @@ def motor_write_pid_rom(motor_id = 1, CurrKP = 0x00, CurrKI = 0x00, SpdKP = 0x00
 
 # 2.5 Write acceleration to RAM and ROM command
 # write the acceleration to RAM and ROM (units are degrees per second^2)
-def motor_write_accel(motor_id = 1, function_index = 0x00, acceleration = 0x64):
+def write_accel(motor_id = 1, function_index = 0x00, acceleration = 0x64):
 	frame = bytearray()
 	# header 
 	frame.append(0xaa)
@@ -79,7 +79,7 @@ def motor_write_accel(motor_id = 1, function_index = 0x00, acceleration = 0x64):
 
 # 2.7 send data: Create request frame for multi-turn encoder original position data command 
 # returns a frame that requests for the multi-turn encoder home position
-def motor_read_multi_encoder_original_position_command(motor_id = 1):
+def read_multi_encoder_original_position(motor_id = 1):
 	frame = bytearray()
 	# header 
 	frame.append(0xaa)
@@ -95,16 +95,16 @@ def motor_read_multi_encoder_original_position_command(motor_id = 1):
 	frame.append(0x55)
 	return bytes(frame)
 
-# 2.7 read data: Parse returned frame for the read multi-turn encoder original position data command 
+# 2.7 parse data: Parse returned frame for the read multi-turn encoder original position data command 
 # returns the multi-turn encoder home position
-def motor_read_multi_encoder_original_position_parse(frame):
-	dataStartIndex = 0
+def parse_multi_encoder_original_position_data(frame):
+	dataStartIndex = frame.index(0x61)
 	origPos = int.from_bytes(frame[dataStartIndex + 4: dataStartIndex + 8], byteorder='little', signed=True)
 	return origPos
 
 # 2.9 Write encoder multi-turn value to ROM as motor zero command
 # set the zero offset (initial position) of the multi turn encoder
-def motor_write_encoder_multi_value_rom_as_zero(motor_id = 1, new_zero = 0x00):
+def write_encoder_multi_value_rom_as_zero(motor_id = 1, new_zero = 0x00):
 	frame = bytearray()
 	# header 
 	frame.append(0xaa)
@@ -116,14 +116,14 @@ def motor_write_encoder_multi_value_rom_as_zero(motor_id = 1, new_zero = 0x00):
 	frame.append(0x63)
 	# data_packet
 	[ frame.append(0x00) for i in range(3) ]
-	[ frame.append(x) for x in new_zero.to_bytes(4, 'little', signed=True) ]
+	[ frame.append(x) for x in new_zero.to_bytes(4, 'little', signed=False) ]
 	# eof 
 	frame.append(0x55)
 	return bytes(frame)
 
 # 2.11 send data: Create request frame for the read single-turn encoder command
 # returns a frame that rquests the current position of the single turn encoder
-def motor_read_single_turn_encoder_command(motor_id = 1):
+def read_single_turn_encoder(motor_id = 1):
 	frame = bytearray()
 	# header 
 	frame.append(0xaa)
@@ -139,17 +139,18 @@ def motor_read_single_turn_encoder_command(motor_id = 1):
 	frame.append(0x55)
 	return bytes(frame)
 
-# 2.11 read data: Parse returned frame for the read single-turn encoder command
+# 2.11 parse data: Parse returned frame for the read single-turn encoder command
 # returns tuple: (position with zero offset, original position, zero offset)
-def motor_read_single_turn_encoder_parse(frame):
-	dataStartIndex = 0
+def parse_single_turn_encoder_data(frame):
+	dataStartIndex = frame.index(0x90)
 	position = int.from_bytes(frame[dataStartIndex + 2: dataStartIndex + 4], byteorder='little', signed=False)
 	origPosition = int.from_bytes(frame[dataStartIndex + 4: dataStartIndex + 6], byteorder='little', signed=False)
 	zeroOffset = int.from_bytes(frame[dataStartIndex + 6: dataStartIndex + 8], byteorder='little', signed=False)
 	return (position, origPosition, zeroOffset)
 
-#2.13 read single-turn angle
-def send_data_field_definition(motor_id=1):
+# 2.13 send data: Create request frame for the read single-turn angle command
+# returns a frame that requests the current single-turn angle of the motor
+def read_single_turn_angle(motor_id = 1):
     frame = bytearray()
 	#header
     frame.append(0xaa)
@@ -165,6 +166,59 @@ def send_data_field_definition(motor_id=1):
 	#eof
     return bytes(frame)
 
+# 2.13 parse data: Parse returned frame for the read single-turn angle command
+# returns int: reutrns the single circle angle of the motor in the unit 0.01°/LSB
+def parse_single_turn_angle_data(frame):
+	dataStartIndex = frame.index(0x94)
+	angle = int.from_bytes(frame[dataStartIndex + 6: dataStartIndex + 8], byteorder='little', signed=True)
+	return angle
+
+# 2.15 send data: Create request frame for the read motor status 2 command
+# returns a frame that requests the temperature, speed and encoder position of the current motor
+def read_motor_status_2(motor_id = 1):
+    frame = bytearray()
+	#header
+    frame.append(0xaa)
+    frame.append(0xc8)
+	#id
+    frame.append(0x40 + motor_id)
+    frame.append(0x01)
+	#command_name
+    frame.append(0x9C)
+	#data_packet
+    [frame.append(0X00 for i in range(7))]
+    frame.append(0x55)
+	#eof
+    return bytes(frame)
+
+# 2.15 parse data: Parse returned frame for the read motor status 2 command command
+# returns tuple: (temperature (1°C/LSB), torque current value (0.01A/LSB), speed (1dps/LSB), output shaft anlge (1degree/LSB))
+def parse_single_turn_angle_data(frame):
+	dataStartIndex = frame.index(0x9C)
+
+	temperature = int.from_bytes(frame[dataStartIndex + 1: dataStartIndex + 2], byteorder='little', signed=True)
+	iq = int.from_bytes(frame[dataStartIndex + 2: dataStartIndex + 4], byteorder='little', signed=True)
+	shaftSpeed = int.from_bytes(frame[dataStartIndex + 4: dataStartIndex + 6], byteorder='little', signed=True)
+	shaftAngle = int.from_bytes(frame[dataStartIndex + 6: dataStartIndex + 8], byteorder='little', signed=True)
+
+	return (temperature, iq, shaftSpeed, shaftAngle)
+
+# 2.17 Motor shut down command
+def motor_shutdown(motor_id = 1):
+	frame = bytearray()
+	#header
+	frame.append(0xaa)
+	frame.append(0xc8)
+	#id
+	frame.append(0x40 + motor_id)
+	frame.append(0x01)
+	#command_name
+	frame.append(0x80)
+	#data_packet
+	[frame.append(0X00 for i in range(7))]
+	frame.append(0x55)
+	#eof
+	return bytes(frame)
 
 # 2.18 Motor stop command
 def motor_stop(motor_id = 1):
