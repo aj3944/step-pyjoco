@@ -201,6 +201,41 @@ def motor_torque_control(motor_id = 1, torque = 0x03):
 	frame.append(0x55)
 	return bytes(frame)
 
+# 2.21 Absolute position closed-loop control command (0xA4)
+# The control value angleControl is int32_t type, and the corresponding actual position is 0.01degree/LSB, that is, 36000 represents 360°, 
+# and the rotation direction of the motor is determined by the difference between the target position and the current position . 
+# The control value maxSpeed limits the maximum speed of the motor output shaft rotation, which is of type uint16_t, corresponding to the actual speed of 1dps/LSB.
+def abs_position_closedloop_control(motor_id = 1, speed = 0x03, angle = 0x0000):
+	frame = bytearray()
+	frame.append(0xaa)
+	frame.append(0xc8)
+	frame.append(0x40 + motor_id)
+	frame.append(0x01)
+	frame.append(0xa4)
+	frame.append(0x00)
+	[ frame.append(x) for x in speed.to_bytes(2, 'little', signed=False) ]
+	[ frame.append(x) for x in angle.to_bytes(4, 'little', signed=True) ]
+	frame.append(0x55)
+	return bytes(frame)
+
+# 2.23 Incremental position closed-loop control command (0xA8)
+# send this command to control the incremental position (multi-turn angle) of the motor, and run the input position increment with the current position as the starting point. 
+# The control value angleControl is of type int32_t, and the corresponding actual position is 0.01degree/LSB, that is, 36000 represents 360°, 
+# and the rotation direction of the motor is determined by the incremental position symbol.
+# The control value maxSpeed limits the maximum speed of the motor output shaft rotation, which is of type uint16_t, 
+# corresponding to the actual speed of 1dps/LSB.
+def incremental_position_closedloop_control(motor_id = 1, speed = 0x03, angle = 0x0000):
+	frame = bytearray()
+	frame.append(0xaa)
+	frame.append(0xc8)
+	frame.append(0x40 + motor_id)
+	frame.append(0x01)
+	frame.append(0xa8)
+	frame.append(0x00)
+	[ frame.append(x) for x in speed.to_bytes(2, 'little', signed=False) ]
+	[ frame.append(x) for x in angle.to_bytes(4, 'little', signed=True) ]
+	frame.append(0x55)
+	return bytes(frame)
 
 # 2.24 System operating mode acquisition 
 # reads the current motor running mode
@@ -233,3 +268,50 @@ def motor_power_acq(motor_id=1):
 	frame.append(0x55) #end of frame
 	return bytes(frame)
 
+# 2.31 Communication interruption protection time setting command (0xB3)
+# used to set the communication interruption protection time in ms. 
+# If the communication is interrupted for more than the set time, it will cut off the output brake lock. 
+# To run again, you need to establish stable and continuous communication first. 
+# Writing 0 means that the communication interruption protection function is not enabled.
+# pass the interruption protection time in ms. 
+def set_comm_interupt_protection_time(motor_id=1, time = 0xFFFF):
+	frame = bytearray()
+	frame.append(0xaa) #header
+	frame.append(0xc8) #header
+	frame.append(0x40 + motor_id) #id
+	frame.append(0x01) #id
+	frame.append(0xB3) #command name
+	[ frame.append(0x00) for i in range(3) ]
+	[ frame.append(x) for x in time.to_bytes(2, 'little', signed=False) ]
+	frame.append(0x55) #end of frame
+	return bytes(frame)
+
+# 2.33 Motor model reading command (0xB5)
+# This command is used to read the motor model, and the read data is ACSII code, which can be converted into the corresponding actual symbol by checking the ACSII code table.
+def read_motor_model(motor_id=1): 
+	frame = bytearray()
+	frame.append(0xaa) #header
+	frame.append(0xc8) #header
+	frame.append(0x40 + motor_id) #id
+	frame.append(0x01) #id
+	frame.append(0xB5) #command name
+	[ frame.append(0x00) for i in range(7) ]
+	frame.append(0x55)
+	return bytes(frame) 
+
+# 2.35 Function control command 
+# This instruction is used to use some specific functions. 
+# It is a compound function instruction, which can contain multiple function control instructions.
+# Be careful to avoid writing parameters when the motor has just started and is in motion.
+def function_control(motor_id=1, func_index = 0x00, value = 0x0000): 
+	frame = bytearray()
+	frame.append(0xaa) #header
+	frame.append(0xc8) #header
+	frame.append(0x40 + motor_id) #id
+	frame.append(0x01) #id
+	frame.append(0x20) #command name
+	frame.append(func_index)
+	[ frame.append(0x00) for i in range(2) ]
+	[ frame.append(x) for x in value.to_bytes(4, 'little', signed=True)]
+	frame.append(0x55)
+	return bytes(frame) 
