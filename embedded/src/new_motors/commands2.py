@@ -35,6 +35,14 @@ def parse_pid_data(frame):
 # stay in 8 bit range, 0-255
 def write_pid_rom(motor_id = 1, CurrKP = 0x00, CurrKI = 0x00, SpdKP = 0x00, 
 						SpdKI = 0x00, PosKP = 0x00, PosKI = 0x00):
+	
+	CurrKP_byte = CurrKP.to_bytes(1, 'little', signed=False)
+	CurrKI_byte = CurrKI.to_bytes(1, 'little', signed=False)
+	SpdKP_byte = SpdKP.to_bytes(1, 'little', signed=False)
+	SpdKI_byte = SpdKI.to_bytes(1, 'little', signed=False)
+	PosKP_byte = PosKP.to_bytes(1, 'little', signed=False)
+	PosKI_byte = PosKI.to_bytes(1, 'little', signed=False)
+
 	frame = bytearray()
 	# header 
 	frame.append(0xaa)
@@ -46,12 +54,12 @@ def write_pid_rom(motor_id = 1, CurrKP = 0x00, CurrKI = 0x00, SpdKP = 0x00,
 	frame.append(0x32)
 	# data_packet
 	frame.append(0x00) 
-	frame.append(CurrKP) 
-	frame.append(CurrKI) 
-	frame.append(SpdKP) 
-	frame.append(SpdKI) 
-	frame.append(PosKP)
-	frame.append(PosKI)  
+	frame.append(CurrKP_byte) 
+	frame.append(CurrKI_byte) 
+	frame.append(SpdKP_byte) 
+	frame.append(SpdKI_byte) 
+	frame.append(PosKP_byte)
+	frame.append(PosKI_byte)  
 	# eof 
 	frame.append(0x55)
 	return bytes(frame)
