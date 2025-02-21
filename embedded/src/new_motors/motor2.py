@@ -42,7 +42,7 @@ class motor():
 
 	# 2.26
 	def goto_position_control(self,angle,direction,speed):
-		self.device.write(single_turn_position_control(self.motor_id, angle, direction, speed)
+		self.device.write(single_turn_position_control(self.motor_id, angle, direction, speed))
 				
 	# 2.28
 	def brake_lock(self):
