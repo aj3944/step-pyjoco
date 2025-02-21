@@ -36,9 +36,6 @@ class motor():
     	# 2.22
     	def goto_position_control(self,angle,direction,speed):
         	self.device.write(single_turn_position_control(self.motor_id,angle,direction,speed)
-    	#2.24
-	def read_mode(self):
-		self.device.write(sys_op_mode(self.motor_id))
 
     	# 2.26
     	def reset_mode(self):
