@@ -42,7 +42,7 @@ class motor():
 		self.device.write(read_encoder(self.motor_id))
 
 	#2.8
-	def read_encoderZero_offset_data(self)
+	def read_encoderZero_offset_data(self):
 		self.device.write(read_encoderZero_offset_data(self.motor.id))
 
 	#2.10 
