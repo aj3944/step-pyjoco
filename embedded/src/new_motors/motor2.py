@@ -53,9 +53,9 @@ class motor():
 		self.device.write(sys_software_date(self.motor_id))
 
 	#2.32
-	def set_com_baud(self):
+	def set_com_baud(self, baudrate):
 		self.device.write(com_baud_setting(self.motor_id, baudrate))
 	#2.34
-	def reply_active(self):
+	def reply_active(self, command,reply,interval_time):
 		self.device.write(active_reply(self.motor_id, command, reply, interval_time))
 		
