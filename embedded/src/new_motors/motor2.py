@@ -40,4 +40,19 @@ class motor():
     	# 2.26
     	def reset_mode(self):
         	self.device.write(sys_reset_command(self.motor_id))
+
+	# 2.28
+	def brake_lock(self):
+		self.device.write(sys_brake_lock(self.motor_id))
+
+	#2.30
+	def read_version(self):
+		self.device.write(sys_software_date(self.motor_id))
+
+	#2.32
+	def set_com_baud(self):
+		self.device.write(com_baud_setting(self.motor_id, baudrate))
+	#2.34
+	def reply_active(self):
+		self.device.write(active_reply(self.motor_id, command, reply, interval_time))
 		
