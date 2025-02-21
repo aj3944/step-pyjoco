@@ -54,3 +54,6 @@ class motor():
 
 	def incr_position_clc(self, maxSpeed, angle): 
 		self.device.write(incremental_position_closedloop_control(self.motor_id, maxSpeed, angle))
+  
+  	def Motor_Power_Acquisition(self):
+       self.device.write(motor_power_acq(self.motor_id))
