@@ -51,7 +51,7 @@ class motor():
 
 	#2.12
 	def read_multi_turn_angle(self):
-		self.device.write(read_multi_turn_angle(self.motor.id)
+		self.device.write(read_multi_turn_angle(self.motor.id))
 
 	#2.14
 	def read_motor_stats_one_and_error_flag(self):
