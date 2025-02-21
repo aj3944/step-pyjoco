@@ -29,6 +29,9 @@ class motor():
 	def read_mode(self):
 		self.device.write(sys_op_mode(self.motor_id))
 
+	def read_encoder(self):
+		self.device.write(read_encoder(self.motor_id))
+
 	# 2.20
     	def speed_control_move(self, speed):
         	self.device.write(motor_speed_control(self.motor_id, speed))
