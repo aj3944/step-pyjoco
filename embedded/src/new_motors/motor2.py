@@ -38,7 +38,7 @@ class motor():
 
     	# 2.22
 	def reset_mode(self):
-        	self.device.write(sys_reset_command(self.motor_id)
+        	self.device.write(sys_reset_command(self.motor_id))
 
 	# 2.26
 	def goto_position_control(self,angle,direction,speed):
