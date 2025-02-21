@@ -37,12 +37,13 @@ class motor():
         	self.device.write(motor_speed_control(self.motor_id, speed))
 
     	# 2.22
-    	def goto_position_control(self,angle,direction,speed):
-        	self.device.write(single_turn_position_control(self.motor_id,angle,direction,speed)
-	
-    	def reset_mode(self):
-        	self.device.write(sys_reset_command(self.motor_id))
+	def reset_mode(self):
+        	self.device.write(sys_reset_command(self.motor_id)
 
+	# 2.26
+	def goto_position_control(self,angle,direction,speed):
+		self.device.write(single_turn_position_control(self.motor_id, angle, direction, speed)
+				
 	# 2.28
 	def brake_lock(self):
 		self.device.write(sys_brake_lock(self.motor_id))
