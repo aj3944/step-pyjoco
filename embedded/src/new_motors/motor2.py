@@ -28,4 +28,23 @@ class motor():
 
 	def read_mode(self):
 		self.device.write(sys_op_mode(self.motor_id))
+
+	# 2.20
+    	def speed_control_move(self, speed):
+        	self.device.write(motor_speed_control(self.motor_id, speed))
+
+    	# 2.22
+    	def goto_position_control(self,angle,direction,speed):
+        	self.device.write(single_turn_position_control(self.motor_id,angle,direction,speed)
+
+	def motor_stop(self):
+		self.device.write(motor_stop(self.motor_id))
+
+    	#2.24
+	def read_mode(self):
+		self.device.write(sys_op_mode(self.motor_id))
+
+    	# 2.26
+    	def reset_mode(self):
+        	self.device.write(sys_reset_command(self.motor_id))
 		
