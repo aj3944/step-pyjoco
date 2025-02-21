@@ -49,3 +49,8 @@ class motor():
 	def read_mode(self):
 		self.device.write(sys_op_mode(self.motor_id))
 		
+	def abs_position_clc(self, maxSpeed, angle):
+		self.device.write(abs_position_closedloop_control(self.motor_id, maxSpeed, angle))
+
+	def incr_position_clc(self, maxSpeed, angle): 
+		self.device.write(incremental_position_closedloop_control(self.motor_id, maxSpeed, angle))
