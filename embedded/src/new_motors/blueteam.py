@@ -187,7 +187,7 @@ def motor_speed_control(motor_id=1, speed=0):
 
 
 # 2.22 Single Turn Position Control Command
-def single_turn_position_control(motor_id=1, angleAbsolute=0, direction=0x00, speedControl=0):
+def single_turn_position_control(motor_id=1, angleAbsolute=0, direction=0x01, speedControl=0):
     frame = bytearray()
     # Header
     frame.append(0xaa)
@@ -199,8 +199,8 @@ def single_turn_position_control(motor_id=1, angleAbsolute=0, direction=0x00, sp
     frame.append(0xa6)
     # Data packets
     frame.append(direction)
-    [frame.append(x) for x in speedControl.to_bytes(2, 'little', signed=False)]
-    [frame.append(x) for x in angleAbsolute.to_bytes(2, 'little', signed=False)]
+    [frame.append(x) for x in speedControl.to_bytes(2, 'little', signed=True)]
+    [frame.append(x) for x in angleAbsolute.to_bytes(2, 'little', signed=True)]
     [frame.append(0x00) for i in range(2)]
     # EOF
     frame.append(0x55)
