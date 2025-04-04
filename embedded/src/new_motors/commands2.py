@@ -169,7 +169,7 @@ def read_single_turn_angle(motor_id = 1):
 	#command_name
     frame.append(0x94)
 	#data_packet
-    [frame.append(0X00 for i in range(7))]
+    [frame.append(0x00) for i in range(7)]
     frame.append(0x55)
 	#eof
     return bytes(frame)
@@ -194,7 +194,7 @@ def read_motor_status_2(motor_id = 1):
 	#command_name
     frame.append(0x9C)
 	#data_packet
-    [frame.append(0X00 for i in range(7))]
+    [frame.append(0x00) for i in range(7)]
     frame.append(0x55)
 	#eof
     return bytes(frame)
@@ -223,7 +223,7 @@ def motor_shutdown(motor_id = 1):
 	#command_name
 	frame.append(0x80)
 	#data_packet
-	[frame.append(0X00 for i in range(7))]
+	[frame.append(0x00) for i in range(7)]
 	frame.append(0x55)
 	#eof
 	return bytes(frame)
@@ -325,6 +325,32 @@ def motor_power_acq(motor_id=1):
 	frame.append(0x40 + motor_id) #id
 	frame.append(0x01) #id
 	frame.append(0x71) #command name
+	for i in range(7): #datapacket gets all the data[1]-[7]
+		frame.append(0x00)
+	frame.append(0x55) #end of frame
+	return bytes(frame)
+
+#2.27 system break relesse
+def motor_brake_release(motor_id=1):
+	frame = bytearray()
+	frame.append(0xaa) #header
+	frame.append(0xc8) #header
+	frame.append(0x40 + motor_id) #id
+	frame.append(0x01) #id
+	frame.append(0x77) #command name
+	for i in range(7): #datapacket gets all the data[1]-[7]
+		frame.append(0x00)
+	frame.append(0x55) #end of frame
+	return bytes(frame)
+
+#2.29 system runtime read 
+def sys_runtime_read(motor_id=1):
+	frame = bytearray()
+	frame.append(0xaa) #header
+	frame.append(0xc8) #header
+	frame.append(0x40 + motor_id) #id
+	frame.append(0x01) #id
+	frame.append(0xB1) #command name
 	for i in range(7): #datapacket gets all the data[1]-[7]
 		frame.append(0x00)
 	frame.append(0x55) #end of frame
