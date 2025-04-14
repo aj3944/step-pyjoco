@@ -6,6 +6,10 @@ import serial
 
 CANUSB_TTY_BAUD_RATE_DEFAULT = 2000000
 
+
+from parsing import *
+
+
 class device():
 	uca = None
 	def __init__(self, port):
@@ -17,10 +21,15 @@ class motor():
 	motor_id = -1	
 	device = None 
 
-	def __init__ (self, id, uca): 
+	def __init__ (self, id, uca, offset): 
 		self.motor_id = id   
 		self.device = uca
+		self.offset = offset 
+		self.speed = 100
 
+
+	def home(self):
+		self.abs_position_clc(self.speed, self.offset)
 	# 2.1
 	def read_pid_param(self):
 		self.device.write(read_pid(self.motor_id))
@@ -87,9 +96,9 @@ class motor():
 		self.device.write(read_single_turn_encoder(self.motor_id))
 		time.sleep(0.1)
 		byte_list = self.device.read(self.device.in_waiting)
-		for b in byte_list:
-			print(hex(b))
-
+		# for b in byte_list:
+		# 	print(hex(b))
+		parse_angle(byte_list)
 	#2.12
 	def read_multiturn_angle(self):
 		self.device.write(read_multi_turn_angle(self.motor_id))
@@ -103,8 +112,9 @@ class motor():
 		self.device.write(read_single_turn_angle(self.motor_id))
 		time.sleep(0.1)
 		byte_list = self.device.read(self.device.in_waiting)
-		for b in byte_list:
-			print(hex(b))
+		# for b in byte_list:
+		# 	print(hex(b))
+		parse_angle(byte_list)
 
 	#2.14
 	def read_motor_stats_one_and_error_flag(self):
