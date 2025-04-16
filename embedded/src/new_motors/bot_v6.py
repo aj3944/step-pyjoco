@@ -18,7 +18,7 @@ class step_proto_6_bot():
 		self.left_hip_1 = motor(2, uca.port(), -500 ) 
 		self.left_hip_2 = motor(3, uca.port(), 2500 ) 
 
-		self.left_knee_0 = motor(4, uca.port(), 0 ) 
+		self.left_knee_0 = motor(4, uca.port(), 2000 ) 
 
 		self.left_foot_0 = motor(5, uca.port(), 1000 ) 
 

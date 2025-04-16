@@ -403,3 +403,24 @@ def function_control(motor_id=1, func_index = 0x00, value = 0x0000):
 	[ frame.append(x) for x in value.to_bytes(4, 'little', signed=True)]
 	frame.append(0x55)
 	return bytes(frame) 
+
+# 4 CANID setting command 
+# This instruction is used to set and read CAN ID information 
+# 1. The read and write flag bit wReadWriteFlag is bool type, 1 read 0 write.
+# 2. CANID, size range (#1~#32), uint16_t type (synchronized with the upper
+# computer function), device identifier 0x140 + ID (1~32).
+def canID_command(motor_id=1, wr = 0x00, new_motor_id = 0): 
+	frame = bytearray() 
+	frame.append(0xaa)
+	frame.append(0xc8)
+	frame.append(0x30 + motor_id) 
+	frame.append(0x00)
+	frame.append(0x79)
+	frame.append(0x00)
+	frame.append(wr)
+	[ frame.append(0x00) for i in range(4) ]
+	# frame.append(0x01)
+	frame.append(new_motor_id)
+	# frame.append(0x01)
+	frame.append(0x55)
+	return bytes(frame)

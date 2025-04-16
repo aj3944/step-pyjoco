@@ -255,6 +255,9 @@ class motor():
 	def func_control_command(self, func_index, val):
 		self.device.write(function_control(self.motor_id, func_index, val))
 	
+	# 4
+	def canID_control(self, wr, newID): 
+		self.device.write(canID_command(self.motor_id, wr, newID))
 
 
 
