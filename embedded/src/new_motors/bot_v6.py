@@ -6,7 +6,7 @@ import time
 # import can 
 
 # Initialize the device
-uca = device("/dev/tty.usbserial-1110")
+uca = device("/dev/tty.usbserial-130")
 # uca = device("/dev/ttyUSB0")
 
 
@@ -16,19 +16,19 @@ class step_proto_6_bot():
 	def __init__(self):
 		self.left_hip_0 = motor(1, uca.port(), 1000 ) 
 		self.left_hip_1 = motor(2, uca.port(), -500 ) 
-		self.left_hip_2 = motor(3, uca.port(), 2500 ) 
+		self.left_hip_2 = motor(3, uca.port(), 3000 ) 
 
-		self.left_knee_0 = motor(4, uca.port(), 2000 ) 
+		self.left_knee_0 = motor(4, uca.port(), 2500 ) 
 
-		self.left_foot_0 = motor(5, uca.port(), 1000 ) 
+		self.left_foot_0 = motor(5, uca.port(), 750 ) 
 
 
 
 		self.right_hip_0 = motor(11, uca.port(), 1000 ) 
 		self.right_hip_1 = motor(12, uca.port(), -500 ) 
-		self.right_hip_2 = motor(13, uca.port(), -2500 ) 
+		self.right_hip_2 = motor(13, uca.port(), -3000 ) 
 
-		self.right_knee_0 = motor(14, uca.port(), -1000 ) 
+		self.right_knee_0 = motor(14, uca.port(), -500 ) 
 
 		self.right_foot_0 = motor(15, uca.port(), 0 ) 
 

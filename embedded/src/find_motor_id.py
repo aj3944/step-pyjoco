@@ -6,7 +6,7 @@ import signal
 import sys
 
 
-uca = device("/dev/ttyUSB0")
+uca = device("/dev/tty.usbserial-120")
 
 def find_motor_id(device, max_attempts=32):
     """
